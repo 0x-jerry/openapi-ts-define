@@ -8,7 +8,7 @@
     "node": ">= 18"
   },
   "scripts": {
-    "dev": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@0x-jerry/utils": "^2.1.1",
+    "fast-glob": "^3.3.2",
     "ts-morph": "^21.0.1"
   }
 }
