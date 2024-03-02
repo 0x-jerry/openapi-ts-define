@@ -8,4 +8,21 @@ export interface RequestParams<
   body?: Body
 }
 
-export interface ResponseContent {}
+export interface ResponseContent { }
+
+
+export interface RouteConfig {
+  path: string
+  method: string
+
+  request: {
+    query?: string[]
+    params?: string[]
+
+    // todo, should be a json schema or ref schema
+    body?: any
+  }
+
+  // todo, should be a json schema or ref schema
+  response?: any
+}

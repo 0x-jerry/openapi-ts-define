@@ -17,9 +17,7 @@ export const get = defRoute<
 
 export const post = defRoute<
   {
-    query: {
-      body: User
-    }
+    body: User
   },
   { data: User }
 >()

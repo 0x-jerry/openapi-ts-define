@@ -1,0 +1,180 @@
+import tsm, { Project, Node, SyntaxKind } from 'ts-morph'
+import fg from 'fast-glob'
+import path from 'path'
+import type { RouteConfig } from './types'
+
+export interface RouteParserOption {
+  tsconfig: string
+}
+
+
+export class RoutesParser {
+  project: Project
+
+  constructor(option: RouteParserOption) {
+    this.project = new tsm.Project({
+      tsConfigFilePath: option.tsconfig,
+    })
+
+  }
+
+  async parse(opt: ApiRoutesConfig) {
+    const files = await fg(opt.files, { cwd: opt.root })
+
+    for (const file of files) {
+      this.parseApiRouteFile(file, opt.root)
+    }
+  }
+
+  parseApiRouteFile(relativeFilePath: string, root: string) {
+    const project = this.project
+
+    const filePath = path.join(root, relativeFilePath)
+
+    const urlPath = convertToUrlPath(relativeFilePath)
+
+
+    const routeSourceFile = project.getSourceFileOrThrow(filePath)
+
+    const methods = ['get', 'post', 'put', 'delete']
+
+    const exportSymbols = routeSourceFile.getExportSymbols()
+
+    const routesConfig: RouteConfig[] = []
+
+    for (const exportSymbol of exportSymbols) {
+      const method = exportSymbol.getName()
+
+      if (!methods.includes(method)) {
+        continue
+      }
+
+      const req = this.getRequestParameters(exportSymbol)
+
+      const routeConfig: RouteConfig = {
+        path: urlPath.path,
+        method: method,
+        request: {
+          query: req?.query,
+          params: req?.params
+        },
+        response: {}
+      }
+
+      console.log(routeConfig)
+
+      routesConfig.push(routeConfig)
+    }
+
+    return routesConfig
+  }
+
+  getRequestParameters(exportSymbol: tsm.Symbol) {
+    const typeParams = this.getTypeParams(exportSymbol)
+    if (!typeParams) {
+      return
+    }
+
+    const { request: reqType, response } = typeParams
+
+    if (Node.isTypeReference(reqType)) {
+      // reqArg
+    }
+
+    if (!Node.isTypeLiteral(reqType)) {
+      return
+    }
+
+    const members = reqType.getMembers()
+
+    const query = members.find((n) => Node.isPropertySignature(n) && n.getName() === 'query')
+    const params = members.find((n) => Node.isPropertySignature(n) && n.getName() === 'params')
+    const body = members.find((n) => Node.isPropertySignature(n) && n.getName() === 'body')
+
+    const queryNames = this.parseSimpleObjectType(query?.asKind(SyntaxKind.PropertySignature)?.getTypeNode())
+
+    const paramsNames = this.parseSimpleObjectType(params?.asKind(SyntaxKind.PropertySignature)?.getTypeNode())
+
+    return {
+      query: queryNames,
+      params: paramsNames,
+      body
+    }
+
+  }
+
+  getTypeParams(exportSymbol: tsm.Symbol) {
+    const valueDeclaration = exportSymbol.getValueDeclaration()
+
+    if (!Node.isVariableDeclaration(valueDeclaration)) {
+      return
+    }
+
+    const initializer = valueDeclaration.getInitializer()
+
+    if (!Node.isCallExpression(initializer)) {
+      return
+    }
+
+    const args = initializer.getTypeArguments()
+
+    const [reqArg, respArg] = args.map((item) => item)
+
+    return {
+      request: reqArg,
+      response: respArg,
+    }
+  }
+
+  parseSimpleObjectType(type?: tsm.TypeNode): string[] {
+    const names: string[] = []
+
+    if (!type) {
+      return names
+    }
+
+    if (!Node.isTypeLiteral(type)) {
+      return names
+    }
+
+    const members = type.getMembers()
+
+    for (const member of members) {
+      if (!Node.isPropertySignature(member)) {
+        continue
+      }
+
+      names.push(member.getName())
+    }
+
+    return names
+  }
+
+
+}
+
+
+interface ApiRoutesConfig {
+  root: string
+  /**
+   * glob pattern
+   */
+  files: string[]
+}
+
+function convertToUrlPath(relativeFilePath: string) {
+  const parsedPath = path.parse(relativeFilePath)
+  // todo, parse request params
+  const urlSegments = parsedPath.dir.split(path.sep)
+
+  if (parsedPath.name !== 'index') {
+    urlSegments.push(parsedPath.name)
+  }
+
+  let urlPath = urlSegments.join('/')
+  urlPath = urlPath[0] === '/' ? urlPath : '/' + urlPath
+
+  return {
+    path: urlPath,
+  }
+}
