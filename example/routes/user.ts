@@ -1,4 +1,5 @@
 import { defRoute } from '../def'
+import type { RequestType } from './_types'
 
 /**
  * User doc
@@ -10,21 +11,15 @@ interface User {
 }
 
 export const get = defRoute<
-  {
-    query: {
-      /**
-       * id doc
-       */
-      id?: string
-    }
-    body: User
-  },
+  RequestType,
   { data: User }
 >()
 
+interface RequestInterface {
+  body: User
+}
+
 export const post = defRoute<
-  {
-    body: User
-  },
+  RequestInterface,
   { data: User }
 >()

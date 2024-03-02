@@ -11,12 +11,17 @@ export interface RequestParams<
 export interface ResponseContent { }
 
 
+export interface RouteReqeustQuery {
+  name: string
+  optional?: boolean
+}
+
 export interface RouteConfig {
   path: string
   method: string
 
   request: {
-    query?: string[]
+    query?: RouteReqeustQuery[]
     params?: string[]
 
     // todo, should be a json schema or ref schema

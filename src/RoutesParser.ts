@@ -1,7 +1,7 @@
 import tsm, { Project, Node, SyntaxKind } from 'ts-morph'
 import fg from 'fast-glob'
 import path from 'path'
-import type { RouteConfig } from './types'
+import type { RouteConfig, RouteReqeustQuery } from './types'
 
 export interface RouteParserOption {
   tsconfig: string
@@ -56,12 +56,12 @@ export class RoutesParser {
         method: method,
         request: {
           query: req?.query,
-          params: req?.params
+          params: req?.params.map(item => item.name)
         },
         response: {}
       }
 
-      console.log(routeConfig)
+      console.log(routeConfig, routeConfig.request)
 
       routesConfig.push(routeConfig)
     }
@@ -75,13 +75,9 @@ export class RoutesParser {
       return
     }
 
-    const { request: reqType, response } = typeParams
+    const reqType = this.getTypeNode(typeParams.request)
 
-    if (Node.isTypeReference(reqType)) {
-      // reqArg
-    }
-
-    if (!Node.isTypeLiteral(reqType)) {
+    if (!reqType) {
       return
     }
 
@@ -101,6 +97,39 @@ export class RoutesParser {
       body
     }
 
+  }
+
+  getTypeNode(node: tsm.Node) {
+    let reqType: tsm.InterfaceDeclaration | tsm.TypeLiteralNode | undefined
+
+
+    if (Node.isTypeReference(node)) {
+      const sourceNode = node
+        .getTypeName()
+        .asKind(SyntaxKind.Identifier)
+        ?.getDefinitions().at(0)
+        ?.getDeclarationNode()
+
+      if (!sourceNode) return
+
+      if (Node.isTypeAliasDeclaration(sourceNode)) {
+        const t = sourceNode.getTypeNode()
+
+        if (Node.isTypeLiteral(t)) {
+          reqType = t
+        }
+      }
+
+      if (Node.isInterfaceDeclaration(sourceNode)) {
+        reqType = sourceNode
+      }
+    }
+
+    if (Node.isTypeLiteral(node)) {
+      reqType = node
+    }
+
+    return reqType
   }
 
   getTypeParams(exportSymbol: tsm.Symbol) {
@@ -126,8 +155,8 @@ export class RoutesParser {
     }
   }
 
-  parseSimpleObjectType(type?: tsm.TypeNode): string[] {
-    const names: string[] = []
+  parseSimpleObjectType(type?: tsm.TypeNode): RouteReqeustQuery[] {
+    const names: RouteReqeustQuery[] = []
 
     if (!type) {
       return names
@@ -144,7 +173,12 @@ export class RoutesParser {
         continue
       }
 
-      names.push(member.getName())
+      const isOptional = member.getQuestionTokenNode()
+
+      names.push({
+        name: member.getName(),
+        optional: !!isOptional
+      })
     }
 
     return names
