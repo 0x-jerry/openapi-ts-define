@@ -56,7 +56,7 @@ export class RoutesParser {
         method: method,
         request: {
           query: req?.query,
-          params: req?.params.map(item => item.name)
+          params: req?.params
         },
         response: {}
       }

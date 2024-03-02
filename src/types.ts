@@ -22,7 +22,7 @@ export interface RouteConfig {
 
   request: {
     query?: RouteReqeustQuery[]
-    params?: string[]
+    params?: RouteReqeustQuery[]
 
     // todo, should be a json schema or ref schema
     body?: any
