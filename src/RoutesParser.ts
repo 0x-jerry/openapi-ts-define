@@ -49,15 +49,24 @@ export class RoutesParser {
         continue
       }
 
-      const req = this.getRequestParameters(exportSymbol)
+      const typeParams = this.getTypeParams(exportSymbol)
+
+      if (!typeParams) {
+        return
+      }
+
+      const req = this.getRequestParameters(typeParams.request)
 
       const routeConfig: RouteConfig = {
         path: urlPath.path,
         method: method,
         request: {
           query: req?.query,
-          params: req?.params
+          params: req?.params,
+          // todo, convert ts-morph to json schema, req.body
+          body: {}
         },
+        // todo, convert ts-morph to json schema, typeParams.response
         response: {}
       }
 
@@ -69,13 +78,8 @@ export class RoutesParser {
     return routesConfig
   }
 
-  getRequestParameters(exportSymbol: tsm.Symbol) {
-    const typeParams = this.getTypeParams(exportSymbol)
-    if (!typeParams) {
-      return
-    }
-
-    const reqType = this.getTypeNode(typeParams.request)
+  getRequestParameters(typeNode: tsm.TypeNode) {
+    const reqType = this.getTypeNode(typeNode)
 
     if (!reqType) {
       return
