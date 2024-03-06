@@ -6,7 +6,7 @@ import { toSchema } from './schema'
 
 describe('object schema', () => {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
-  const cwd = path.join(__dirname, 'example')
+  const cwd = path.join(__dirname, 'examples')
 
   const project = new Project({
     tsConfigFilePath: path.join(cwd, 'tsconfig.json')
@@ -23,10 +23,10 @@ describe('object schema', () => {
       const types = source.getTypeAliases()
       const interfaces = source.getInterfaces()
 
-      for (const t of [...types, ...interfaces]) {
-        const schema = toSchema(t)
-        expect(schema).toMatchFileSnapshot(file.replace('.ts', '.json'))
-      }
+      const jsonFile = path.join(cwd, file.replace('.ts', '.json'))
+      const schemas = [...types, ...interfaces].map(n => toSchema(n))
+
+      expect(JSON.stringify(schemas, null, 2)).toMatchFileSnapshot(jsonFile)
     })
   }
 

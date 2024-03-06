@@ -1,0 +1,22 @@
+[
+  {
+    "type": "object",
+    "description": "Literal Object Type",
+    "properties": {
+      "s": {},
+      "n": {},
+      "b": {},
+      "o": {}
+    }
+  },
+  {
+    "type": "object",
+    "description": "Object Type",
+    "properties": {
+      "s": {},
+      "n": {},
+      "b": {},
+      "o": {}
+    }
+  }
+]
