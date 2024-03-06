@@ -22,7 +22,7 @@ export function toSchema(node: tsm.Node): JSONSchema7 {
     }
   }
 
-  else if (Node.isStringKeyword(node) || Node.isStringLiteral(node)) {
+  else if (Node.isStringKeyword(node) || Node.isStringLiteral(node) || Node.isNoSubstitutionTemplateLiteral(node)) {
     return toStringSchema(node)
   }
 
