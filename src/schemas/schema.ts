@@ -5,6 +5,7 @@ import { toObjectSchema } from './object'
 import { toStringSchema } from './string'
 import { toNumberSchema } from './number'
 import { toBooleanSchema } from './boolean'
+import { toUnionSchema } from './union'
 
 export function toSchema(node: tsm.Node): JSONSchema7 {
   if (Node.isInterfaceDeclaration(node)) {
@@ -29,6 +30,10 @@ export function toSchema(node: tsm.Node): JSONSchema7 {
 
   else if (Node.isBooleanKeyword(node) || Node.isTrueLiteral(node) || Node.isFalseLiteral(node)) {
     return toBooleanSchema(node)
+  }
+
+  else if (Node.isUnionTypeNode(node)) {
+    return toUnionSchema(node)
   }
 
   const shcmea: JSONSchema7 = {}
