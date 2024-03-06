@@ -3,22 +3,27 @@ import tsm, { Node } from 'ts-morph'
 import { toSchema } from './schema'
 import { getJsDoc } from './utils'
 
-export function toObjectSchema(node: tsm.TypeAliasDeclaration | tsm.InterfaceDeclaration): JSONSchema7 {
+export function toObjectSchema(
+  node: tsm.TypeAliasDeclaration | tsm.InterfaceDeclaration | tsm.TypeLiteralNode
+): JSONSchema7 {
   const schema: JSONSchema7 = {
     type: 'object',
   }
 
-  const description = getJsDoc(node)
-  if (description) {
-    schema.description = description
+  if (!Node.isTypeLiteral(node)) {
+    const description = getJsDoc(node)
+    if (description) {
+      schema.description = description
+    }
   }
 
   const properties: tsm.PropertySignature[] = []
 
-  const propertiesContainerNode = Node.isTypeAliasDeclaration(node) ?
-    node.getTypeNode()?.asKind(tsm.ts.SyntaxKind.TypeLiteral) : node
+  const propertiesContainerNode = Node.isTypeAliasDeclaration(node)
+    ? node.getTypeNode()?.asKind(tsm.ts.SyntaxKind.TypeLiteral)
+    : node
 
-  propertiesContainerNode?.getMembers().forEach(prop => {
+  propertiesContainerNode?.getMembers().forEach((prop) => {
     if (Node.isPropertySignature(prop)) {
       properties.push(prop)
     }

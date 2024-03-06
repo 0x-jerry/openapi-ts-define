@@ -11,14 +11,18 @@ import { toEnumSchema } from './enum'
 export function toSchema(node: tsm.Node): JSONSchema7 {
   node = unwrapNode(node)
 
-  if (Node.isInterfaceDeclaration(node)) {
-    return toObjectSchema(node)
-  } else if (Node.isTypeAliasDeclaration(node)) {
+  if (Node.isTypeAliasDeclaration(node)) {
     const typeNode = node.getTypeNode()
 
     if (Node.isTypeLiteral(typeNode)) {
       return toObjectSchema(node)
+    } else if (Node.isUnionTypeNode(typeNode)) {
+      return toUnionSchema(typeNode)
     }
+  } else if (Node.isTypeLiteral(node)) {
+    return toObjectSchema(node)
+  } else if (Node.isInterfaceDeclaration(node)) {
+    return toObjectSchema(node)
   } else if (
     Node.isStringKeyword(node) ||
     Node.isStringLiteral(node) ||
