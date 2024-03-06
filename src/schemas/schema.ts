@@ -8,6 +8,8 @@ import { toBooleanSchema } from './boolean'
 import { toUnionSchema } from './union'
 
 export function toSchema(node: tsm.Node): JSONSchema7 {
+  node = unwrapNode(node)
+
   if (Node.isInterfaceDeclaration(node)) {
     return toObjectSchema(node)
   }
@@ -38,4 +40,12 @@ export function toSchema(node: tsm.Node): JSONSchema7 {
 
   const shcmea: JSONSchema7 = {}
   return shcmea
+}
+
+function unwrapNode(node: tsm.Node): tsm.Node {
+  if (Node.isLiteralTypeNode(node)) {
+    return node.getLiteral()
+  }
+
+  return node
 }
