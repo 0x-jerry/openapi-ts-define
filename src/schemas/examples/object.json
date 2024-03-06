@@ -6,8 +6,12 @@
       "s": {
         "type": "string"
       },
-      "n": {},
-      "b": {},
+      "n": {
+        "type": "number"
+      },
+      "b": {
+        "type": "boolean"
+      },
       "o": {
         "type": "string"
       }
@@ -25,8 +29,12 @@
       "s": {
         "type": "string"
       },
-      "n": {},
-      "b": {},
+      "n": {
+        "type": "number"
+      },
+      "b": {
+        "type": "boolean"
+      },
       "o": {
         "type": "string"
       }
