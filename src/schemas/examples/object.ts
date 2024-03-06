@@ -41,3 +41,15 @@ type LiteralObjectType = {
    */
   o?: string
 }
+
+interface LiteralValueObject {
+  Str: 'string'
+
+  Num: 1111
+
+  TemplateStr: `ssss`
+
+  True?: true
+
+  False: false
+}

@@ -52,5 +52,36 @@
       "n",
       "b"
     ]
+  },
+  {
+    "type": "object",
+    "properties": {
+      "Str": {
+        "type": "string",
+        "const": "string"
+      },
+      "Num": {
+        "type": "number",
+        "const": 1111
+      },
+      "TemplateStr": {
+        "type": "string",
+        "const": "ssss"
+      },
+      "True": {
+        "type": "boolean",
+        "const": true
+      },
+      "False": {
+        "type": "boolean",
+        "const": false
+      }
+    },
+    "required": [
+      "Str",
+      "Num",
+      "TemplateStr",
+      "False"
+    ]
   }
 ]
