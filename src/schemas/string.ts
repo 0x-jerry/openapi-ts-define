@@ -1,9 +1,13 @@
 import type { JSONSchema7 } from 'json-schema'
-import tsm from 'ts-morph'
+import tsm, { Node } from 'ts-morph'
 
-export function toStringSchema(node: tsm.TypeAliasDeclaration | tsm.PropertySignature): JSONSchema7 {
+export function toStringSchema(node: tsm.StringLiteral | tsm.Expression): JSONSchema7 {
   const schema: JSONSchema7 = {
-    type: 'string'
+    type: 'string',
+  }
+
+  if (Node.isStringLiteral(node)) {
+    schema.const = node.getLiteralValue()
   }
 
   return schema

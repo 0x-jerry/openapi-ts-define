@@ -27,17 +27,27 @@ export function toObjectSchema(node: tsm.TypeAliasDeclaration | tsm.InterfaceDec
   if (properties.length) {
     const propertiesSchema: Record<string, JSONSchema7> = {}
 
+    const required: string[] = []
+
     for (const property of properties) {
       const name = property.getName()
 
       const node = property.getTypeNode()
 
-      const propertySchema : JSONSchema7 = node ? toSchema(node) : { type: 'string' }
+      const propertySchema: JSONSchema7 = node ? toSchema(node) : { type: 'string' }
 
       propertiesSchema[name] = propertySchema
+
+      if (!property.hasQuestionToken()) {
+        required.push(name)
+      }
     }
 
     schema.properties = propertiesSchema
+
+    if (required.length) {
+      schema.required = required
+    }
   }
 
   return schema

@@ -3,20 +3,38 @@
     "type": "object",
     "description": "Literal Object Type",
     "properties": {
-      "s": {},
+      "s": {
+        "type": "string"
+      },
       "n": {},
       "b": {},
-      "o": {}
-    }
+      "o": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "s",
+      "n",
+      "b"
+    ]
   },
   {
     "type": "object",
     "description": "Object Type",
     "properties": {
-      "s": {},
+      "s": {
+        "type": "string"
+      },
       "n": {},
       "b": {},
-      "o": {}
-    }
+      "o": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "s",
+      "n",
+      "b"
+    ]
   }
 ]
