@@ -9,7 +9,7 @@ describe('object schema', () => {
   const cwd = path.join(__dirname, 'examples')
 
   const project = new Project({
-    tsConfigFilePath: path.join(cwd, 'tsconfig.json')
+    tsConfigFilePath: path.join(cwd, 'tsconfig.json'),
   })
 
   const files = fg.sync('*.ts', { cwd })
@@ -22,12 +22,12 @@ describe('object schema', () => {
 
       const types = source.getTypeAliases()
       const interfaces = source.getInterfaces()
+      const enums = source.getEnums()
 
       const jsonFile = path.join(cwd, file.replace('.ts', '.json'))
-      const schemas = [...types, ...interfaces].map(n => toSchema(n))
+      const schemas = [...types, ...enums, ...interfaces].map((n) => toSchema(n))
 
       expect(JSON.stringify(schemas, null, 2)).toMatchFileSnapshot(jsonFile)
     })
   }
-
 })
