@@ -19,6 +19,9 @@ devDependencies:
   '@0x-jerry/x-release':
     specifier: ^1.0.0
     version: 1.0.0
+  '@types/json-schema':
+    specifier: ^7.0.15
+    version: 7.0.15
   '@types/node':
     specifier: ^20.11.24
     version: 20.11.24
@@ -524,6 +527,10 @@ packages:
 
   /@types/istanbul-lib-coverage@2.0.6:
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
+    dev: true
+
+  /@types/json-schema@7.0.15:
+    resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
     dev: true
 
   /@types/node@20.11.24:
