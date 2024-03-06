@@ -4,16 +4,20 @@
     "description": "Literal Object Type",
     "properties": {
       "s": {
-        "type": "string"
+        "type": "string",
+        "description": "string"
       },
       "n": {
-        "type": "number"
+        "type": "number",
+        "description": "number"
       },
       "b": {
-        "type": "boolean"
+        "type": "boolean",
+        "description": "boolean"
       },
       "o": {
-        "type": "string"
+        "type": "string",
+        "description": "optional string"
       }
     },
     "required": [
@@ -27,16 +31,20 @@
     "description": "Object Type",
     "properties": {
       "s": {
-        "type": "string"
+        "type": "string",
+        "description": "string"
       },
       "n": {
-        "type": "number"
+        "type": "number",
+        "description": "number"
       },
       "b": {
-        "type": "boolean"
+        "type": "boolean",
+        "description": "boolean"
       },
       "o": {
-        "type": "string"
+        "type": "string",
+        "description": "optional string"
       }
     },
     "required": [
