@@ -1,14 +1,14 @@
 import type { JSONSchema7 } from 'json-schema'
 import tsm, { Node } from 'ts-morph'
 import { toSchema } from './schema'
+import { getJsDoc } from './utils'
 
 export function toObjectSchema(node: tsm.TypeAliasDeclaration | tsm.InterfaceDeclaration): JSONSchema7 {
   const schema: JSONSchema7 = {
     type: 'object',
   }
 
-  const description = node.getJsDocs().map(item => item.getDescription()).join('\n').trim()
-
+  const description = getJsDoc(node)
   if (description) {
     schema.description = description
   }
@@ -35,6 +35,11 @@ export function toObjectSchema(node: tsm.TypeAliasDeclaration | tsm.InterfaceDec
       const node = property.getTypeNode()
 
       const propertySchema: JSONSchema7 = node ? toSchema(node) : { type: 'string' }
+
+      const description = getJsDoc(property)
+      if (description) {
+        propertySchema.description = description
+      }
 
       propertiesSchema[name] = propertySchema
 
