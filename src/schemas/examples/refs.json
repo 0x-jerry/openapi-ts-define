@@ -1,0 +1,35 @@
+[
+  {
+    "oneOf": [
+      {
+        "$ref": "(refs.ts).B"
+      },
+      {
+        "$ref": "(union.ts).A"
+      },
+      {
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "type": "object",
+    "description": "interface ref",
+    "properties": {
+      "A": {
+        "$ref": "(union.ts).A"
+      },
+      "B": {
+        "type": "number"
+      },
+      "C": {
+        "type": "number",
+        "const": 1
+      }
+    },
+    "required": [
+      "A",
+      "B"
+    ]
+  }
+]

@@ -3,6 +3,7 @@ import { Project } from 'ts-morph'
 import { fileURLToPath } from 'url'
 import fg from 'fast-glob'
 import { toSchema } from './schema'
+import type { ToSchemaContext } from './types'
 
 describe('object schema', () => {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -13,6 +14,12 @@ describe('object schema', () => {
   })
 
   const files = fg.sync('*.ts', { cwd })
+
+  const ctx: ToSchemaContext = {
+    cwd,
+    project,
+    refs: new Map()
+  }
 
   for (const file of files) {
     it(`should convert to schema: ${file}`, async () => {
@@ -25,7 +32,7 @@ describe('object schema', () => {
       const enums = source.getEnums()
 
       const jsonFile = path.join(cwd, file.replace('.ts', '.json'))
-      const schemas = [...types, ...enums, ...interfaces].map((n) => toSchema(n))
+      const schemas = [...types, ...enums, ...interfaces].map((n) => toSchema(n, ctx))
 
       expect(JSON.stringify(schemas, null, 2)).toMatchFileSnapshot(jsonFile)
     })

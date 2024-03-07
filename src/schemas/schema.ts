@@ -7,22 +7,25 @@ import { toNumberSchema } from './number'
 import { toBooleanSchema } from './boolean'
 import { toUnionSchema } from './union'
 import { toEnumSchema } from './enum'
+import { toRefSchema } from './ref'
+import type { ToSchemaContext } from './types'
 
-export function toSchema(node: tsm.Node): JSONSchema7 {
+
+export function toSchema(node: tsm.Node, ctx: ToSchemaContext): JSONSchema7 {
   node = unwrapNode(node)
 
   if (Node.isTypeAliasDeclaration(node)) {
     const typeNode = node.getTypeNode()
 
     if (Node.isTypeLiteral(typeNode)) {
-      return toObjectSchema(node)
+      return toObjectSchema(node, ctx)
     } else if (Node.isUnionTypeNode(typeNode)) {
-      return toUnionSchema(typeNode)
+      return toUnionSchema(typeNode, ctx)
     }
   } else if (Node.isTypeLiteral(node)) {
-    return toObjectSchema(node)
+    return toObjectSchema(node, ctx)
   } else if (Node.isInterfaceDeclaration(node)) {
-    return toObjectSchema(node)
+    return toObjectSchema(node, ctx)
   } else if (
     Node.isStringKeyword(node) ||
     Node.isStringLiteral(node) ||
@@ -34,9 +37,11 @@ export function toSchema(node: tsm.Node): JSONSchema7 {
   } else if (Node.isBooleanKeyword(node) || Node.isTrueLiteral(node) || Node.isFalseLiteral(node)) {
     return toBooleanSchema(node)
   } else if (Node.isUnionTypeNode(node)) {
-    return toUnionSchema(node)
+    return toUnionSchema(node, ctx)
   } else if (Node.isEnumDeclaration(node)) {
     return toEnumSchema(node)
+  } else if (Node.isTypeReference(node)) {
+    return toRefSchema(node, ctx)
   }
 
   const shcmea: JSONSchema7 = {}
