@@ -1,7 +1,7 @@
 /**
  * Object Type
  */
-interface ObjectType {
+export interface ObjectType {
   /**
    * string
    */

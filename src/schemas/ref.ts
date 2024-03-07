@@ -3,7 +3,6 @@ import tsm from 'ts-morph'
 import type { ToSchemaContext } from './types'
 import { toSchema } from './schema'
 import path from 'path'
-import { existsSync } from 'fs'
 
 export function toRefSchema(node: tsm.TypeReferenceNode, ctx: ToSchemaContext): JSONSchema7 {
   const schema: JSONSchema7 = {
@@ -25,7 +24,7 @@ export function toRefSchema(node: tsm.TypeReferenceNode, ctx: ToSchemaContext): 
   schema.$ref = refKey
 
   if (!ctx.refs.has(refKey)) {
-    const type = sf.getTypeAlias(name) || sf.getInterface(name)
+    const type = sf.getTypeAlias(name) || sf.getInterface(name) || sf.getEnum(name)
     if (type) {
       ctx.refs.set(refKey, toSchema(type, ctx))
     } else {
