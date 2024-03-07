@@ -1,5 +1,5 @@
 import path from 'path'
-import { Project } from 'ts-morph'
+import { Node, Project } from 'ts-morph'
 import { fileURLToPath } from 'url'
 import fg from 'fast-glob'
 import { toSchema } from './schema'
@@ -28,14 +28,13 @@ describe('object schema', () => {
 
       const source = project.getSourceFileOrThrow(absFile)
 
-      const types = source.getTypeAliases()
-      const interfaces = source.getInterfaces()
-      const enums = source.getEnums()
+      const types = source.getStatements().filter(node => Node.isInterfaceDeclaration(node) || Node.isTypeAliasDeclaration(node) || Node.isEnumDeclaration(node))
 
-      const jsonFile = path.join(cwd, file.replace('.ts', '.json'))
-      const schemas = [...types, ...enums, ...interfaces].map((n) => toSchema(n, ctx))
+      const outputFile = path.join(cwd, file.replace('.ts', '.output.js'))
 
-      expect(JSON.stringify(schemas, null, 2)).toMatchFileSnapshot(jsonFile)
+      const schemas = types.map((n) => toSchema(n, ctx))
+
+      expect(schemas).toMatchFileSnapshot(outputFile)
     })
   }
 })

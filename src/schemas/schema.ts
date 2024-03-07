@@ -26,9 +26,10 @@ export function toSchema(node: tsm.Node | tsm.Type, ctx: ToSchemaContext): JSONS
 }
 
 function _toSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
-  if (type.isUnion()) {
-    return toUnionSchema(type, ctx)
-  } else if (type.isObject() || type.isEnum()) {
+  // if (type.isUnion()) {
+  //   return toUnionSchema(type, ctx)
+  // } else
+  if (type.isObject() || type.isEnum()) {
     return toObjectSchema(type, ctx)
   } else if (type.isString() || type.isStringLiteral()) {
     return toStringSchema(type)
