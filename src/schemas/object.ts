@@ -30,20 +30,25 @@ export function toObjectSchema(
   for (const prop of props) {
     const propName = prop.getName()
     const propNode = prop.getValueDeclaration()
+    const isOptional = prop.isOptional()
 
     let propType = prop.getTypeAtLocation(rootNode)
 
-    const isOptional = prop.isOptional()
-
-    if (!isOptional) {
-      required.push(propName)
-    }
 
     if (propType.isUnion() && isOptional) {
       const types = propType.getUnionTypes().filter(n => !n.isUndefined())
       if (types.length === 1) {
         propType = types[0]
       }
+    }
+
+    // skip methods
+    if (propType.getCallSignatures().length) {
+      continue
+    }
+
+    if (!isOptional) {
+      required.push(propName)
     }
 
     const propSchema = toSchema(propType, ctx)
