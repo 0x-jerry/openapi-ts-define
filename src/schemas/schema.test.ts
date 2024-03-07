@@ -18,7 +18,8 @@ describe('object schema', () => {
   const ctx: ToSchemaContext = {
     cwd,
     project,
-    refs: new Map()
+    refs: new Map(),
+    nodeStack: []
   }
 
   for (const file of files) {
