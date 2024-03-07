@@ -4,10 +4,20 @@
     "properties": {
       "A": {
         "oneOf": [
-          {},
-          {},
-          {},
-          {},
+          {
+            "type": "string",
+          },
+          {
+            "type": "number",
+          },
+          {
+            "const": false,
+            "type": "boolean",
+          },
+          {
+            "const": true,
+            "type": "boolean",
+          },
         ],
       },
       "B": {
@@ -55,19 +65,39 @@
   },
   {
     "oneOf": [
-      {},
-      {},
-      {},
-      {},
       {
-        "description": "interface ref",
+        "type": "string",
+      },
+      {
+        "type": "number",
+      },
+      {
+        "const": false,
+        "type": "boolean",
+      },
+      {
+        "const": true,
+        "type": "boolean",
+      },
+      {
+        "description": "type ref",
         "properties": {
           "A": {
             "oneOf": [
-              {},
-              {},
-              {},
-              {},
+              {
+                "type": "string",
+              },
+              {
+                "type": "number",
+              },
+              {
+                "const": false,
+                "type": "boolean",
+              },
+              {
+                "const": true,
+                "type": "boolean",
+              },
             ],
           },
           "B": {
@@ -79,7 +109,7 @@
           },
           "E": {},
           "O": {
-            "description": "interface ref",
+            "description": "type ref",
             "properties": {
               "b": {
                 "description": "boolean",
