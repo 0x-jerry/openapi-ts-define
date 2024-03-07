@@ -31,12 +31,22 @@ export function toObjectSchema(
     const propName = prop.getName()
     const propNode = prop.getValueDeclaration()
 
-    const propType = prop.getTypeAtLocation(rootNode)
-    const propSchema = toSchema(propType, ctx)
+    let propType = prop.getTypeAtLocation(rootNode)
 
-    if (!prop.isOptional()) {
+    const isOptional = prop.isOptional()
+
+    if (!isOptional) {
       required.push(propName)
     }
+
+    if (propType.isUnion() && isOptional) {
+      const types = propType.getUnionTypes().filter(n => !n.isUndefined())
+      if (types.length === 1) {
+        propType = types[0]
+      }
+    }
+
+    const propSchema = toSchema(propType, ctx)
 
     if (propNode && (Node.isPropertySignature(propNode)) || Node.isEnumMember(propNode)) {
       const description = getJsDoc(propNode)

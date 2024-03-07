@@ -12,6 +12,7 @@
       },
       "o": {
         "description": "optional string",
+        "type": "string",
       },
       "s": {
         "description": "string",
@@ -38,6 +39,7 @@
       },
       "o": {
         "description": "optional string",
+        "type": "string",
       },
       "s": {
         "description": "string",
@@ -54,7 +56,7 @@
   {
     "properties": {
       "False": {
-        "const": undefined,
+        "const": false,
         "type": "boolean",
       },
       "Num": {
@@ -69,7 +71,10 @@
         "const": "ssss",
         "type": "string",
       },
-      "True": {},
+      "True": {
+        "const": true,
+        "type": "boolean",
+      },
     },
     "required": [
       "Str",

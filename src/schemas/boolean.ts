@@ -7,7 +7,7 @@ export function toBooleanSchema(node: tsm.Type): JSONSchema7 {
   }
 
   if (node.isBooleanLiteral()) {
-    schema.const = node.getLiteralValue() as any
+    schema.const = node.getText() === 'true'
   }
 
   return schema
