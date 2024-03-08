@@ -50,10 +50,7 @@ function generatePropSchema(prop: tsm.Symbol, ctx: ToSchemaContext): { schema: J
 
   // unwrap optional type
   if (propType.isUnion() && isOptional) {
-    const types = propType.getUnionTypes().filter(n => !n.isUndefined())
-    if (types.length === 1) {
-      propType = types[0]
-    }
+    propType = propType.getNonNullableType()
   }
 
   // skip methods
@@ -70,6 +67,6 @@ function generatePropSchema(prop: tsm.Symbol, ctx: ToSchemaContext): { schema: J
 
   return {
     schema: propSchema,
-    required: isOptional
+    required: !isOptional
   }
 }
