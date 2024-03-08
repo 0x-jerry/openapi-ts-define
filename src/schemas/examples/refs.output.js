@@ -29,7 +29,7 @@
       },
       "E": {},
       "O": {
-        "description": "interface ref",
+        "description": "Object Type",
         "properties": {
           "b": {
             "description": "boolean",
@@ -80,7 +80,7 @@
         "type": "boolean",
       },
       {
-        "description": "type ref",
+        "description": "interface ref",
         "properties": {
           "A": {
             "oneOf": [
@@ -109,7 +109,7 @@
           },
           "E": {},
           "O": {
-            "description": "type ref",
+            "description": "Object Type",
             "properties": {
               "b": {
                 "description": "boolean",
