@@ -1,21 +1,23 @@
 import type { JSONSchema7 } from 'json-schema'
-import tsm from 'ts-morph'
+import tsm, { Node } from 'ts-morph'
 import type { ToSchemaContext } from './types'
 import { toSchema } from './schema'
 import path from 'path'
 
-export function toRefSchema(node: tsm.TypeReferenceNode, ctx: ToSchemaContext): JSONSchema7 {
+export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   const schema: JSONSchema7 = {
     $ref: ''
   }
 
-  const sourceName = node.getType().getText()
-  const name = node.getTypeName().getText()
+  const sy = type.getSymbol() || type.getAliasSymbol()
+  const node = sy?.getDeclarations().at(0)
 
-  // todo, resolve suffix, make sure file path is correct.
-  const absFile = sourceName.slice('import("'.length, -('").' + name).length) + '.ts'
+  if (!Node.isInterfaceDeclaration(node)) {
+    return {}
+  }
 
-  const sf = ctx.project.getSourceFile(absFile) || node.getSourceFile()
+  const name = node.getName()
+  const sf = node.getSourceFile()
 
   const relativePath = path.relative(ctx.cwd, sf.getFilePath())
   const refKey = `(${relativePath}).${name}`
@@ -24,12 +26,8 @@ export function toRefSchema(node: tsm.TypeReferenceNode, ctx: ToSchemaContext): 
   schema.$ref = refKey
 
   if (!ctx.refs.has(refKey)) {
-    const type = sf.getTypeAlias(name) || sf.getInterface(name) || sf.getEnum(name)
-    if (type) {
-      ctx.refs.set(refKey, toSchema(type, ctx))
-    } else {
-      console.warn('can not resolve type', node.getText())
-    }
+    const schema = toSchema(type, ctx, { skipRefCheck: true })
+    ctx.refs.set(refKey, schema)
   }
 
 

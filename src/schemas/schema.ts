@@ -1,31 +1,38 @@
 import type { JSONSchema7 } from 'json-schema'
-import tsm from 'ts-morph'
+import tsm, { ts } from 'ts-morph'
+import type { ToSchemaContext } from './types'
 
 import { toObjectSchema } from './object'
 import { toStringSchema } from './string'
 import { toNumberSchema } from './number'
 import { toBooleanSchema } from './boolean'
 import { toUnionSchema } from './union'
-import type { ToSchemaContext } from './types'
+import { toRefSchema } from './ref'
 
 
-export function toSchema(node: tsm.Node | tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
+export interface ToSchemaOption {
+  skipRefCheck?: boolean
+}
+
+export function toSchema(node: tsm.Node | tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption): JSONSchema7 {
   if (tsm.Node.isNode(node)) {
 
     ctx.nodeStack.push(node)
 
     const type = node.getType()
-    const schema = _toSchema(type, ctx)
+    const schema = _toSchema(type, ctx, option)
 
     ctx.nodeStack.pop()
 
     return schema
   }
 
-  return _toSchema(node, ctx)
+  return _toSchema(node, ctx, option)
 }
 
-function _toSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
+function _toSchema(type: tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption): JSONSchema7 {
+  // const objectFlag = type.getObjectFlags()
+
   if (type.isBoolean() || type.isBooleanLiteral()) {
     return toBooleanSchema(type)
   } else if (type.isUnion()) {
