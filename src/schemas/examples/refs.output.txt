@@ -27,6 +27,33 @@
       ],
       "type": "object",
     },
+    "(object.ts).LiteralObjectType" => {
+      "description": "Literal Object Type",
+      "properties": {
+        "b": {
+          "description": "boolean",
+          "type": "boolean",
+        },
+        "n": {
+          "description": "number",
+          "type": "number",
+        },
+        "o": {
+          "description": "optional string",
+          "type": "string",
+        },
+        "s": {
+          "description": "string",
+          "type": "string",
+        },
+      },
+      "required": [
+        "s",
+        "n",
+        "b",
+      ],
+      "type": "object",
+    },
     "(refs.ts).B" => {
       "description": "interface ref",
       "properties": {
@@ -69,6 +96,9 @@
         },
         "O": {
           "$ref": "(object.ts).ObjectType",
+        },
+        "type": {
+          "$ref": "(object.ts).LiteralObjectType",
         },
       },
       "required": [

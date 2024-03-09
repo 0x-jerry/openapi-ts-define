@@ -38,7 +38,7 @@ function _toSchema(type: tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption
   } else if (type.isUnion()) {
     return toUnionSchema(type, ctx)
   } else if (type.isObject() || type.isEnum()) {
-    if (!option?.skipRefCheck && !type.isAnonymous()) {
+    if (!option?.skipRefCheck && isRefType(type, ctx)) {
       return toRefSchema(type, ctx)
     }
 
@@ -51,4 +51,8 @@ function _toSchema(type: tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption
 
   const shcmea: JSONSchema7 = {}
   return shcmea
+}
+
+function isRefType(type: tsm.Type, ctx: ToSchemaContext) {
+  return !type.isAnonymous() || !!type.getSymbol()
 }

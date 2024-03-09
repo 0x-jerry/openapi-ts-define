@@ -23,7 +23,7 @@ export interface ObjectType {
 /**
  * Literal Object Type
  */
-type LiteralObjectType = {
+export type LiteralObjectType = {
   /**
    * string
    */
