@@ -1,0 +1,108 @@
+{
+  "refs": Map {
+    "(object.ts).ObjectType" => {
+      "description": "Object Type",
+      "properties": {
+        "b": {
+          "description": "boolean",
+          "type": "boolean",
+        },
+        "n": {
+          "description": "number",
+          "type": "number",
+        },
+        "o": {
+          "description": "optional string",
+          "type": "string",
+        },
+        "s": {
+          "description": "string",
+          "type": "string",
+        },
+      },
+      "required": [
+        "s",
+        "n",
+        "b",
+      ],
+      "type": "object",
+    },
+    "(refs.ts).B" => {
+      "description": "interface ref",
+      "properties": {
+        "A": {
+          "oneOf": [
+            {
+              "type": "string",
+            },
+            {
+              "type": "number",
+            },
+            {
+              "const": false,
+              "type": "boolean",
+            },
+            {
+              "const": true,
+              "type": "boolean",
+            },
+          ],
+        },
+        "B": {
+          "type": "number",
+        },
+        "C": {
+          "const": 1,
+          "type": "number",
+        },
+        "E": {
+          "oneOf": [
+            {
+              "const": 0,
+              "type": "number",
+            },
+            {
+              "const": 1,
+              "type": "number",
+            },
+          ],
+        },
+        "O": {
+          "$ref": "(object.ts).ObjectType",
+        },
+      },
+      "required": [
+        "A",
+        "B",
+        "O",
+      ],
+      "type": "object",
+    },
+  },
+  "schemas": [
+    {
+      "$ref": "(refs.ts).B",
+    },
+    {
+      "oneOf": [
+        {
+          "type": "string",
+        },
+        {
+          "type": "number",
+        },
+        {
+          "const": false,
+          "type": "boolean",
+        },
+        {
+          "const": true,
+          "type": "boolean",
+        },
+        {
+          "$ref": "(refs.ts).B",
+        },
+      ],
+    },
+  ],
+}

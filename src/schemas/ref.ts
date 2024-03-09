@@ -6,7 +6,7 @@ import path from 'path'
 
 export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   const schema: JSONSchema7 = {
-    $ref: ''
+    $ref: '',
   }
 
   const sy = type.getSymbol() || type.getAliasSymbol()
@@ -29,7 +29,6 @@ export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
     const schema = toSchema(type, ctx, { skipRefCheck: true })
     ctx.refs.set(refKey, schema)
   }
-
 
   return schema
 }

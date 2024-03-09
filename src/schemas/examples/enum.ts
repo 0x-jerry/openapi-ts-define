@@ -1,7 +1,7 @@
 /**
  * Switch Value
  */
-enum Values {
+export enum Values {
   On,
   Off,
 }

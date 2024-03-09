@@ -15,26 +15,38 @@ describe('object schema', () => {
 
   const files = fg.sync('*.ts', { cwd })
 
-  const ctx: ToSchemaContext = {
-    cwd,
-    project,
-    refs: new Map(),
-    nodeStack: []
-  }
-
   for (const file of files) {
     it(`should convert to schema: ${file}`, async () => {
+      const ctx: ToSchemaContext = {
+        cwd,
+        project,
+        refs: new Map(),
+        nodeStack: [],
+      }
+
       const absFile = path.join(cwd, file)
 
       const source = project.getSourceFileOrThrow(absFile)
 
-      const types = source.getStatements().filter(node => Node.isInterfaceDeclaration(node) || Node.isTypeAliasDeclaration(node) || Node.isEnumDeclaration(node))
+      const types = source
+        .getStatements()
+        .filter(
+          (node) =>
+            Node.isInterfaceDeclaration(node) ||
+            Node.isTypeAliasDeclaration(node) ||
+            Node.isEnumDeclaration(node)
+        )
 
-      const outputFile = path.join(cwd, file.replace('.ts', '.output.js'))
+      const outputFile = path.join(cwd, file.replace('.ts', '.output.txt'))
 
       const schemas = types.map((n) => toSchema(n, ctx))
 
-      expect(schemas).toMatchFileSnapshot(outputFile)
+      const output = {
+        schemas,
+        refs: ctx.refs,
+      }
+
+      expect(output).toMatchFileSnapshot(outputFile)
     })
   }
 })

@@ -9,14 +9,16 @@ import { toBooleanSchema } from './boolean'
 import { toUnionSchema } from './union'
 import { toRefSchema } from './ref'
 
-
 export interface ToSchemaOption {
   skipRefCheck?: boolean
 }
 
-export function toSchema(node: tsm.Node | tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption): JSONSchema7 {
+export function toSchema(
+  node: tsm.Node | tsm.Type,
+  ctx: ToSchemaContext,
+  option?: ToSchemaOption
+): JSONSchema7 {
   if (tsm.Node.isNode(node)) {
-
     ctx.nodeStack.push(node)
 
     const type = node.getType()
@@ -31,20 +33,21 @@ export function toSchema(node: tsm.Node | tsm.Type, ctx: ToSchemaContext, option
 }
 
 function _toSchema(type: tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption): JSONSchema7 {
-  // const objectFlag = type.getObjectFlags()
-
   if (type.isBoolean() || type.isBooleanLiteral()) {
     return toBooleanSchema(type)
   } else if (type.isUnion()) {
     return toUnionSchema(type, ctx)
   } else if (type.isObject() || type.isEnum()) {
+    if (!option?.skipRefCheck && !type.isAnonymous()) {
+      return toRefSchema(type, ctx)
+    }
+
     return toObjectSchema(type, ctx)
   } else if (type.isString() || type.isStringLiteral()) {
     return toStringSchema(type)
   } else if (type.isNumber() || type.isNumberLiteral()) {
     return toNumberSchema(type)
   }
-
 
   const shcmea: JSONSchema7 = {}
   return shcmea
