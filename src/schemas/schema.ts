@@ -8,6 +8,7 @@ import { toNumberSchema } from './number'
 import { toBooleanSchema } from './boolean'
 import { toUnionSchema } from './union'
 import { toRefSchema } from './ref'
+import { toEnumSchema } from '.'
 
 export interface ToSchemaOption {
   skipRefCheck?: boolean
@@ -33,11 +34,13 @@ export function toSchema(
 }
 
 function _toSchema(type: tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption): JSONSchema7 {
-  if (type.isBoolean() || type.isBooleanLiteral()) {
+  if (type.isEnum()) {
+    return toEnumSchema(type)
+  } else if (type.isBoolean() || type.isBooleanLiteral()) {
     return toBooleanSchema(type)
   } else if (type.isUnion()) {
     return toUnionSchema(type, ctx)
-  } else if (type.isObject() || type.isEnum()) {
+  } else if (type.isObject()) {
     if (!option?.skipRefCheck && isRefType(type, ctx)) {
       return toRefSchema(type, ctx)
     }

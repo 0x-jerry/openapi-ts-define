@@ -83,15 +83,9 @@
           "type": "number",
         },
         "E": {
-          "oneOf": [
-            {
-              "const": 0,
-              "type": "number",
-            },
-            {
-              "const": 1,
-              "type": "number",
-            },
+          "enum": [
+            0,
+            1,
           ],
         },
         "O": {
