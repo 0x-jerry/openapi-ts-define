@@ -35,7 +35,11 @@ export function toSchema(
 
 function _toSchema(type: tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption): JSONSchema7 {
   if (type.isEnum()) {
-    return toEnumSchema(type)
+    if (option?.skipRefCheck) {
+      return toEnumSchema(type)
+    }
+
+    return toRefSchema(type, ctx)
   } else if (type.isBoolean() || type.isBooleanLiteral()) {
     return toBooleanSchema(type)
   } else if (type.isUnion()) {

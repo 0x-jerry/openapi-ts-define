@@ -1,5 +1,11 @@
 {
   "refs": Map {
+    "(enum.ts).Values" => {
+      "enum": [
+        0,
+        1,
+      ],
+    },
     "(object.ts).ObjectType" => {
       "description": "Object Type",
       "properties": {
@@ -83,10 +89,7 @@
           "type": "number",
         },
         "E": {
-          "enum": [
-            0,
-            1,
-          ],
+          "$ref": "(enum.ts).Values",
         },
         "O": {
           "$ref": "(object.ts).ObjectType",

@@ -1,20 +1,19 @@
 {
-  "refs": Map {},
-  "schemas": [
-    {
+  "refs": Map {
+    "(enum.ts).Values" => {
       "enum": [
         0,
         1,
       ],
     },
-    {
+    "(enum.ts).StingEnum" => {
       "enum": [
         "a",
         "b",
         "c",
       ],
     },
-    {
+    "(enum.ts).NumEnum" => {
       "enum": [
         1,
         2,
@@ -22,7 +21,7 @@
         6,
       ],
     },
-    {
+    "(enum.ts).MixEnum" => {
       "enum": [
         "a",
         1,
@@ -32,6 +31,20 @@
         "c",
         "d",
       ],
+    },
+  },
+  "schemas": [
+    {
+      "$ref": "(enum.ts).Values",
+    },
+    {
+      "$ref": "(enum.ts).StingEnum",
+    },
+    {
+      "$ref": "(enum.ts).NumEnum",
+    },
+    {
+      "$ref": "(enum.ts).MixEnum",
     },
   ],
 }

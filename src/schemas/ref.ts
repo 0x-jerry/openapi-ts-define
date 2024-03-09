@@ -4,6 +4,12 @@ import type { ToSchemaContext } from './types'
 import { toSchema } from './schema'
 import path from 'path'
 
+/**
+ *
+ * @param type maybe interface declaration, type literal, enum declaration
+ * @param ctx
+ * @returns
+ */
 export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   const schema: JSONSchema7 = {
     $ref: '',
@@ -12,7 +18,8 @@ export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   const sy = type.getSymbol() || type.getAliasSymbol()
   const node = sy?.getDeclarations().at(0)
 
-  const supportedType = Node.isInterfaceDeclaration(node) || Node.isTypeLiteral(node)
+  const supportedType =
+    Node.isInterfaceDeclaration(node) || Node.isTypeLiteral(node) || Node.isEnumDeclaration(node)
 
   if (!supportedType) {
     return toSchema(type, ctx, { skipRefCheck: true })
@@ -40,7 +47,7 @@ export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   return schema
 }
 
-function getNodeName(node: tsm.InterfaceDeclaration | tsm.TypeLiteralNode) {
+function getNodeName(node: tsm.InterfaceDeclaration | tsm.TypeLiteralNode | tsm.EnumDeclaration) {
   if (Node.isTypeLiteral(node)) {
     const parentNode = node.getParent()
     if (Node.isTypeAliasDeclaration(parentNode)) {
