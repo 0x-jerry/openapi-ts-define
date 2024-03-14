@@ -70,19 +70,13 @@ export class RoutesParser {
         continue
       }
 
-      const req = typeParams.request ? this.getRequestParameters(typeParams.request) : undefined
-
-      const respType = typeParams.response
+      const reqConfig = typeParams.request ? this.getRequestParameters(typeParams.request) : undefined
 
       const routeConfig: RouteConfig = {
         path: urlPath.path,
         method: method,
-        request: {
-          query: req?.query,
-          params: req?.params,
-          body: req?.body
-        },
-        response: this.typeToSchema(respType)
+        request: reqConfig,
+        response: this.typeToSchema(typeParams.response)
       }
 
       routesConfig.push(routeConfig)

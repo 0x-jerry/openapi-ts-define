@@ -22,7 +22,7 @@ export interface RouteConfig {
   path: string
   method: string
 
-  request: {
+  request?: {
     query?: RouteReqeustQuery[]
     params?: RouteReqeustQuery[]
 
