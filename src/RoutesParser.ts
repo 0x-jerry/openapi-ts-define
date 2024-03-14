@@ -2,6 +2,8 @@ import tsm, { Project, Node, SyntaxKind } from 'ts-morph'
 import fg from 'fast-glob'
 import path from 'path'
 import type { RouteConfig, RouteReqeustQuery } from './types'
+import type { ToSchemaContext } from './schemas/types'
+import { toSchema } from './schemas/schema'
 
 export interface RouteParserOption {
   tsconfig: string
@@ -11,18 +13,32 @@ export interface RouteParserOption {
 export class RoutesParser {
   project: Project
 
+  schemaContext: ToSchemaContext
+
+  routes: RouteConfig[] = []
+
   constructor(option: RouteParserOption) {
     this.project = new tsm.Project({
       tsConfigFilePath: option.tsconfig,
     })
 
+    const cwd = path.resolve(path.dirname(option.tsconfig))
+
+    this.schemaContext = {
+      cwd,
+      project: this.project,
+      refs: new Map(),
+      nodeStack: [],
+    }
   }
 
   async parse(opt: ApiRoutesConfig) {
     const files = await fg(opt.files, { cwd: opt.root })
 
     for (const file of files) {
-      this.parseApiRouteFile(file, opt.root)
+      const config = this.parseApiRouteFile(file, opt.root)
+
+      this.routes.push(...config)
     }
   }
 
@@ -32,7 +48,6 @@ export class RoutesParser {
     const filePath = path.join(root, relativeFilePath)
 
     const urlPath = convertToUrlPath(relativeFilePath)
-
 
     const routeSourceFile = project.getSourceFileOrThrow(filePath)
 
@@ -52,10 +67,12 @@ export class RoutesParser {
       const typeParams = this.getTypeParams(exportSymbol)
 
       if (!typeParams) {
-        return
+        continue
       }
 
-      const req = this.getRequestParameters(typeParams.request)
+      const req = typeParams.request ? this.getRequestParameters(typeParams.request) : undefined
+
+      const respType = typeParams.response
 
       const routeConfig: RouteConfig = {
         path: urlPath.path,
@@ -63,14 +80,10 @@ export class RoutesParser {
         request: {
           query: req?.query,
           params: req?.params,
-          // todo, convert ts-morph to json schema, req.body
-          body: {}
+          body: req?.body
         },
-        // todo, convert ts-morph to json schema, typeParams.response
-        response: {}
+        response: respType ? toSchema(respType, this.schemaContext) : undefined
       }
-
-      console.log(routeConfig, routeConfig.request)
 
       routesConfig.push(routeConfig)
     }
@@ -98,7 +111,7 @@ export class RoutesParser {
     return {
       query: queryNames,
       params: paramsNames,
-      body
+      body: body ? toSchema(body, this.schemaContext) : undefined
     }
 
   }
@@ -154,8 +167,8 @@ export class RoutesParser {
     const [reqArg, respArg] = args.map((item) => item)
 
     return {
-      request: reqArg,
-      response: respArg,
+      request: reqArg as tsm.TypeNode | undefined,
+      response: respArg as tsm.TypeNode | undefined,
     }
   }
 

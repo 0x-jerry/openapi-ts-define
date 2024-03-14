@@ -1,0 +1,182 @@
+{
+  "refs": Map {
+    "(example/routes/_types.ts).User" => {
+      "description": "User doc",
+      "properties": {
+        "email": {
+          "type": "string",
+        },
+        "id": {
+          "type": "string",
+        },
+        "name": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "id",
+        "name",
+      ],
+      "type": "object",
+    },
+    "(example/routes/user.ts).User" => {
+      "description": "User doc",
+      "properties": {
+        "email": {
+          "type": "string",
+        },
+        "id": {
+          "type": "string",
+        },
+        "name": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "id",
+        "name",
+      ],
+      "type": "object",
+    },
+    "(example/routes/api/test.ts).User" => {
+      "properties": {
+        "email": {
+          "type": "string",
+        },
+        "id": {
+          "type": "string",
+        },
+        "name": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "id",
+        "name",
+      ],
+      "type": "object",
+    },
+  },
+  "rotues": [
+    {
+      "method": "get",
+      "path": "/",
+      "request": {
+        "body": undefined,
+        "params": [],
+        "query": [],
+      },
+      "response": {
+        "properties": {
+          "data": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+    {
+      "method": "get",
+      "path": "/user",
+      "request": {
+        "body": {
+          "$ref": "(example/routes/_types.ts).User",
+        },
+        "params": [],
+        "query": [
+          {
+            "name": "id",
+            "optional": true,
+          },
+          {
+            "name": "name",
+            "optional": false,
+          },
+        ],
+      },
+      "response": {
+        "properties": {
+          "data": {
+            "$ref": "(example/routes/user.ts).User",
+          },
+        },
+        "required": [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+    {
+      "method": "post",
+      "path": "/user",
+      "request": {
+        "body": {
+          "$ref": "(example/routes/user.ts).User",
+        },
+        "params": [],
+        "query": [],
+      },
+      "response": {
+        "properties": {
+          "data": {
+            "$ref": "(example/routes/user.ts).User",
+          },
+        },
+        "required": [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+    {
+      "method": "get",
+      "path": "/api/test",
+      "request": {
+        "body": undefined,
+        "params": [],
+        "query": [
+          {
+            "name": "id",
+            "optional": true,
+          },
+        ],
+      },
+      "response": {
+        "properties": {
+          "data": {
+            "$ref": "(example/routes/api/test.ts).User",
+          },
+        },
+        "required": [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+    {
+      "method": "post",
+      "path": "/api/test",
+      "request": {
+        "body": {
+          "$ref": "(example/routes/api/test.ts).User",
+        },
+        "params": [],
+        "query": [],
+      },
+      "response": {
+        "properties": {
+          "data": {
+            "$ref": "(example/routes/api/test.ts).User",
+          },
+        },
+        "required": [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+  ],
+}
