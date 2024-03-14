@@ -52,4 +52,8 @@ interface LiteralValueObject {
   True?: true
 
   False: false
+
+  obj: {
+    a: number
+  }
 }

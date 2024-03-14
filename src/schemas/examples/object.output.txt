@@ -76,12 +76,24 @@
           "const": true,
           "type": "boolean",
         },
+        "obj": {
+          "properties": {
+            "a": {
+              "type": "number",
+            },
+          },
+          "required": [
+            "a",
+          ],
+          "type": "object",
+        },
       },
       "required": [
         "Str",
         "Num",
         "TemplateStr",
         "False",
+        "obj",
       ],
       "type": "object",
     },
