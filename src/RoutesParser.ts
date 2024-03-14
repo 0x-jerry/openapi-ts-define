@@ -82,7 +82,7 @@ export class RoutesParser {
           params: req?.params,
           body: req?.body
         },
-        response: respType ? toSchema(respType, this.schemaContext) : undefined
+        response: this.typeToSchema(respType)
       }
 
       routesConfig.push(routeConfig)
@@ -111,9 +111,14 @@ export class RoutesParser {
     return {
       query: queryNames,
       params: paramsNames,
-      body: body ? toSchema(body, this.schemaContext) : undefined
+      body: this.typeToSchema(body)
     }
 
+  }
+
+  typeToSchema(typeNode?: tsm.Node) {
+    if (!typeNode) return
+    return toSchema(typeNode, this.schemaContext)
   }
 
   getTypeNode(node: tsm.Node) {
