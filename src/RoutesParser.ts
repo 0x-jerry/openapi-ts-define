@@ -159,6 +159,24 @@ export class RoutesParser {
     }
 
     const tc = this.project.getTypeChecker()
+    /**
+     * Example parse code:
+     *
+     * ```ts
+     * interface RouteDefinition<Req, Resp> {
+     *  (req: Req, ctx: any): Promisable<Resp>
+     *}
+     *
+     * export function defRoute<Req extends RequestParams = {}, Resp extends Record<string, any> = {}>(
+     *  fn: RouteDefinition<Req, Resp>
+     * ) {}
+     *
+     * const get = defineRoute((req: RequestType) => {} as ReturnType)
+     * ```
+     * There are two limitations:
+     * 1. A function like `defineRoute` and the first argument should be a function
+     * 2. A utils function signature like `RouteDefinition` and it should have two type arguments(Req, Resp).
+     */
     const args = tc
       .getResolvedSignature(initializer)
       ?.getParameters()
