@@ -10,16 +10,18 @@ interface User {
   email?: string
 }
 
-export const get = defRoute<
-  RequestType,
-  { data: User }
->()
+export const get = defRoute<RequestType, { data: User }>(() => {
+  return {
+    data: {} as any,
+  }
+})
 
 interface RequestInterface {
   body: User
 }
 
-export const post = defRoute<
-  RequestInterface,
-  { data: User }
->()
+export const post = defRoute<RequestInterface, { data: User }>(() => {
+  return {
+    data: {} as any,
+  }
+})

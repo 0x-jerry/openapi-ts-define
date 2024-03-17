@@ -57,14 +57,26 @@
       "type": "object",
     },
   },
-  "rotues": [
+  "routes": [
     {
       "method": "get",
       "path": "/",
       "request": {
-        "body": undefined,
-        "params": [],
-        "query": [],
+        "body": {
+          "$ref": "(example/routes/_types.ts).User",
+        },
+        "params": [
+          {
+            "name": "id",
+            "optional": false,
+          },
+        ],
+        "query": [
+          {
+            "name": "email",
+            "optional": true,
+          },
+        ],
       },
       "response": {
         "properties": {

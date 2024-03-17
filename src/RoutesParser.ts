@@ -86,37 +86,32 @@ export class RoutesParser {
     return routesConfig
   }
 
-  getRequestParameters(typeNode: tsm.TypeNode) {
-    const reqType = this.getTypeNode(typeNode)
+  getRequestParameters(typeNode: tsm.Type) {
+    const getNodeType = (query?: tsm.Symbol) =>
+      query?.getTypeAtLocation(typeNode.getSymbol()?.getDeclarations().at(0)!)
 
-    if (!reqType) {
-      return
-    }
+    const query = typeNode.getProperty('query')
+    const params = typeNode.getProperty('params')
+    const body = typeNode.getProperty('body')
 
-    const members = reqType.getMembers()
+    const queryNames = this.parseSimpleObjectType(getNodeType(query))
 
-    const query = members.find((n) => Node.isPropertySignature(n) && n.getName() === 'query')
-    const params = members.find((n) => Node.isPropertySignature(n) && n.getName() === 'params')
-    const body = members.find((n) => Node.isPropertySignature(n) && n.getName() === 'body')
-
-    const queryNames = this.parseSimpleObjectType(
-      query?.asKind(SyntaxKind.PropertySignature)?.getTypeNode()
-    )
-
-    const paramsNames = this.parseSimpleObjectType(
-      params?.asKind(SyntaxKind.PropertySignature)?.getTypeNode()
-    )
+    const paramsNames = this.parseSimpleObjectType(getNodeType(params))
 
     return {
       query: queryNames,
       params: paramsNames,
-      body: this.typeToSchema(body),
+      body: this.typeToSchema(getNodeType(body)),
     }
   }
 
-  typeToSchema(typeNode?: tsm.Node) {
-    if (!typeNode) return
-    return toSchema(typeNode, this.schemaContext)
+  typeToSchema(typeNode?: tsm.Type) {
+    const node = typeNode?.getSymbol()?.getDeclarations().at(0)
+
+    if (!node) return
+
+    return toSchema(node, this.schemaContext)
+    // return toSchema(typeNode, this.schemaContext)
   }
 
   getTypeNode(node: tsm.Node) {
@@ -143,9 +138,7 @@ export class RoutesParser {
       if (Node.isInterfaceDeclaration(sourceNode)) {
         reqType = sourceNode
       }
-    }
-
-    if (Node.isTypeLiteral(node)) {
+    } else if (Node.isTypeLiteral(node)) {
       reqType = node
     }
 
@@ -165,38 +158,37 @@ export class RoutesParser {
       return
     }
 
-    const args = initializer.getTypeArguments()
+    const tc = this.project.getTypeChecker()
+    const args = tc
+      .getResolvedSignature(initializer)
+      ?.getParameters()
+      .at(0)
+      ?.getTypeAtLocation(initializer)
+      .getTypeArguments()
 
-    const [reqArg, respArg] = args.map((item) => item)
+    const reqArg = args?.at(0)
+    const respArg = args?.at(1)
 
     return {
-      request: reqArg as tsm.TypeNode | undefined,
-      response: respArg as tsm.TypeNode | undefined,
+      request: reqArg,
+      response: respArg,
     }
   }
 
-  parseSimpleObjectType(type?: tsm.TypeNode): RouteReqeustQuery[] {
+  parseSimpleObjectType(type?: tsm.Type): RouteReqeustQuery[] {
     const names: RouteReqeustQuery[] = []
 
     if (!type) {
       return names
     }
 
-    if (!Node.isTypeLiteral(type)) {
-      return names
-    }
+    const props = type.getProperties()
 
-    const members = type.getMembers()
-
-    for (const member of members) {
-      if (!Node.isPropertySignature(member)) {
-        continue
-      }
-
-      const isOptional = member.getQuestionTokenNode()
+    for (const property of props) {
+      const isOptional = property.isOptional()
 
       names.push({
-        name: member.getName(),
+        name: property.getName(),
         optional: !!isOptional,
       })
     }
