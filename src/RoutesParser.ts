@@ -9,7 +9,6 @@ export interface RouteParserOption {
   tsconfig: string
 }
 
-
 export class RoutesParser {
   project: Project
 
@@ -32,8 +31,8 @@ export class RoutesParser {
     }
   }
 
-  async parse(opt: ApiRoutesConfig) {
-    const files = await fg(opt.files, { cwd: opt.root })
+  parse(opt: ApiRoutesConfig) {
+    const files = fg.sync(opt.files, { cwd: opt.root })
 
     for (const file of files) {
       const config = this.parseApiRouteFile(file, opt.root)
@@ -70,13 +69,15 @@ export class RoutesParser {
         continue
       }
 
-      const reqConfig = typeParams.request ? this.getRequestParameters(typeParams.request) : undefined
+      const reqConfig = typeParams.request
+        ? this.getRequestParameters(typeParams.request)
+        : undefined
 
       const routeConfig: RouteConfig = {
         path: urlPath.path,
         method: method,
         request: reqConfig,
-        response: this.typeToSchema(typeParams.response)
+        response: this.typeToSchema(typeParams.response),
       }
 
       routesConfig.push(routeConfig)
@@ -98,16 +99,19 @@ export class RoutesParser {
     const params = members.find((n) => Node.isPropertySignature(n) && n.getName() === 'params')
     const body = members.find((n) => Node.isPropertySignature(n) && n.getName() === 'body')
 
-    const queryNames = this.parseSimpleObjectType(query?.asKind(SyntaxKind.PropertySignature)?.getTypeNode())
+    const queryNames = this.parseSimpleObjectType(
+      query?.asKind(SyntaxKind.PropertySignature)?.getTypeNode()
+    )
 
-    const paramsNames = this.parseSimpleObjectType(params?.asKind(SyntaxKind.PropertySignature)?.getTypeNode())
+    const paramsNames = this.parseSimpleObjectType(
+      params?.asKind(SyntaxKind.PropertySignature)?.getTypeNode()
+    )
 
     return {
       query: queryNames,
       params: paramsNames,
-      body: this.typeToSchema(body)
+      body: this.typeToSchema(body),
     }
-
   }
 
   typeToSchema(typeNode?: tsm.Node) {
@@ -118,12 +122,12 @@ export class RoutesParser {
   getTypeNode(node: tsm.Node) {
     let reqType: tsm.InterfaceDeclaration | tsm.TypeLiteralNode | undefined
 
-
     if (Node.isTypeReference(node)) {
       const sourceNode = node
         .getTypeName()
         .asKind(SyntaxKind.Identifier)
-        ?.getDefinitions().at(0)
+        ?.getDefinitions()
+        .at(0)
         ?.getDeclarationNode()
 
       if (!sourceNode) return
@@ -193,16 +197,13 @@ export class RoutesParser {
 
       names.push({
         name: member.getName(),
-        optional: !!isOptional
+        optional: !!isOptional,
       })
     }
 
     return names
   }
-
-
 }
-
 
 interface ApiRoutesConfig {
   root: string
