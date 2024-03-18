@@ -1,7 +1,5 @@
-# TS SDK Template
+# OpenAPI TS Define
 
-## TODO
+> This package is under development, break change are expected!
 
-- [ ] run `npm init --yes`
-- [ ] change package metadata
-- [ ] rewrite this docs.
+This package provide a way to parse source code base on AST, then extract the api route information.

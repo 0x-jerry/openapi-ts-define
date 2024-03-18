@@ -13,11 +13,11 @@ export const get = defRoute<
     }
   },
   { data: User }
->()
+>( () => ({}) as any)
 
 export const post = defRoute<
   {
     body: User
   },
   { data: User }
->()
+>(() => ({}) as any)
