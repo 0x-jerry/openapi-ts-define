@@ -24,11 +24,8 @@ export interface RouteConfig {
   request?: {
     query?: RouteRequestParam[]
     params?: RouteRequestParam[]
-
-    // todo, should be a json schema or ref schema
     body?: JSONSchema7
   }
 
-  // todo, should be a json schema or ref schema
   response?: JSONSchema7
 }

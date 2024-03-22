@@ -1,9 +1,12 @@
-import tsm, { Project, Node, SyntaxKind } from 'ts-morph'
+import tsm, { Project } from 'ts-morph'
 import fg from 'fast-glob'
 import path from 'path'
 import type { RouteConfig, RouteRequestParam } from './types'
 import type { ToSchemaContext } from './schemas/types'
 import { toSchema } from './schemas/schema'
+import { toArray } from '@0x-jerry/utils'
+import type { RouteInfoExtractor } from './extractor/types'
+import nitroExtractor from './extractor/nitro'
 
 export interface RouteParserOption {
   tsconfig: string
@@ -32,48 +35,47 @@ export class RoutesParser {
   }
 
   parse(opt: ApiRoutesConfig) {
+    const extractor = opt.routeInfoExtractor ?? nitroExtractor
+
     const files = fg.sync(opt.files, { cwd: opt.root })
 
     for (const file of files) {
-      const config = this.parseApiRouteFile(file, opt.root)
+      const config = this.parseApiRouteFile(file, opt.root, extractor)
 
-      if (config) {
-        this.routes.push(config)
-      }
+      this.routes.push(...config)
     }
   }
 
-  parseApiRouteFile(relativeFilePath: string, root: string) {
+  parseApiRouteFile(relativeFilePath: string, root: string, extractor: RouteInfoExtractor) {
     const project = this.project
 
     const filePath = path.join(root, relativeFilePath)
 
-    const routeInfo = convertToUrlPath(relativeFilePath)
-
     const routeSourceFile = project.getSourceFileOrThrow(filePath)
 
-    const exportSymbol = routeSourceFile.getDefaultExportSymbol()
+    const routeInfos = extractor(routeSourceFile, {
+      path: relativeFilePath,
+      project,
+    })
 
-    if (!exportSymbol) {
-      return
-    }
+    if (!routeInfos) return []
 
-    const typeParams = this.getTypeParams(exportSymbol)
+    return toArray(routeInfos).map((routeInfo) => {
+      const typeParams = this.getRouteTypes(routeInfo.routeDefineAST)
 
-    if (!typeParams) {
-      return
-    }
+      const reqConfig = typeParams.request
+        ? this.getRequestParameters(typeParams.request)
+        : undefined
 
-    const reqConfig = typeParams.request ? this.getRequestParameters(typeParams.request) : undefined
+      const routeConfig: RouteConfig = {
+        path: routeInfo.path,
+        method: routeInfo.method,
+        request: reqConfig,
+        response: this.typeToSchema(typeParams.response),
+      }
 
-    const routeConfig: RouteConfig = {
-      path: routeInfo.path,
-      method: routeInfo.method,
-      request: reqConfig,
-      response: this.typeToSchema(typeParams.response),
-    }
-
-    return routeConfig
+      return routeConfig
+    })
   }
 
   getRequestParameters(typeNode: tsm.Type) {
@@ -84,9 +86,9 @@ export class RoutesParser {
     const params = typeNode.getProperty('params')
     const body = typeNode.getProperty('body')
 
-    const queryNames = this.parseSimpleObjectType(getNodeType(query))
+    const queryNames = parseSimpleObjectType(getNodeType(query))
 
-    const paramsNames = this.parseSimpleObjectType(getNodeType(params))
+    const paramsNames = parseSimpleObjectType(getNodeType(params))
 
     return {
       query: queryNames,
@@ -101,45 +103,9 @@ export class RoutesParser {
     if (!node) return
 
     return toSchema(node, this.schemaContext)
-    // return toSchema(typeNode, this.schemaContext)
   }
 
-  getTypeNode(node: tsm.Node) {
-    let reqType: tsm.InterfaceDeclaration | tsm.TypeLiteralNode | undefined
-
-    if (Node.isTypeReference(node)) {
-      const sourceNode = node
-        .getTypeName()
-        .asKind(SyntaxKind.Identifier)
-        ?.getDefinitions()
-        .at(0)
-        ?.getDeclarationNode()
-
-      if (!sourceNode) return
-
-      if (Node.isTypeAliasDeclaration(sourceNode)) {
-        const t = sourceNode.getTypeNode()
-
-        if (Node.isTypeLiteral(t)) {
-          reqType = t
-        }
-      }
-
-      if (Node.isInterfaceDeclaration(sourceNode)) {
-        reqType = sourceNode
-      }
-    } else if (Node.isTypeLiteral(node)) {
-      reqType = node
-    }
-
-    return reqType
-  }
-
-  getTypeParams(exportSymbol: tsm.Symbol) {
-    const fnExpression = this.getRouteDefineFn(exportSymbol)
-
-    if (!Node.isCallExpression(fnExpression)) return
-
+  getRouteTypes(fnExpression: tsm.CallExpression) {
     const tc = this.project.getTypeChecker()
     /**
      * Example parse code:
@@ -174,116 +140,33 @@ export class RoutesParser {
       response: respArg,
     }
   }
-
-  getRouteDefineFn(exportSymbol: tsm.Symbol) {
-    const valueDeclaration = exportSymbol.getDeclarations().at(0)
-
-    if (!Node.isExportAssignment(valueDeclaration)) {
-      return
-    }
-
-    let initializer: tsm.Node | undefined = valueDeclaration.getExpression()
-
-    if (Node.isCallExpression(initializer)) {
-      return initializer
-    }
-
-    if (Node.isIdentifier(initializer)) {
-      const node = initializer.getDefinitionNodes().at(0)
-      if (Node.isVariableDeclaration(node)) {
-        return node.getInitializer()
-      }
-    }
-  }
-
-  parseSimpleObjectType(type?: tsm.Type): RouteRequestParam[] {
-    const names: RouteRequestParam[] = []
-
-    if (!type) {
-      return names
-    }
-
-    const props = type.getProperties()
-
-    for (const property of props) {
-      const isOptional = property.isOptional()
-
-      names.push({
-        name: property.getName(),
-        optional: !!isOptional,
-      })
-    }
-
-    return names
-  }
 }
 
+function parseSimpleObjectType(type?: tsm.Type): RouteRequestParam[] {
+  const names: RouteRequestParam[] = []
+
+  if (!type) {
+    return names
+  }
+
+  const props = type.getProperties()
+
+  for (const property of props) {
+    const isOptional = property.isOptional()
+
+    names.push({
+      name: property.getName(),
+      optional: !!isOptional,
+    })
+  }
+
+  return names
+}
 interface ApiRoutesConfig {
   root: string
   /**
    * glob pattern
    */
   files: string[]
-}
-
-// -------
-const methodRE = /\.(?<method>get|post|put|delete)$/i
-
-/**
- *
- * Supported path format:
- *
- * - api/hello.ts => GET /api/hello
- * - api/hello.get.ts => GET /api/hello
- * - api/hello.post.ts => POST /api/hello
- * - api/user/[id].get.ts => GET /api/user/:id
- * - api/user/[id].post.ts => POST /api/user/:id
- * - api/user/[id]/[name].put.ts => PUT /api/user/:id/:name
- *
- * @param relativeFilePath
- * @returns
- */
-function convertToUrlPath(relativeFilePath: string) {
-  let method = 'get'
-
-  const params: RouteRequestParam[] = []
-
-  const parsedPath = path.parse(relativeFilePath)
-  // remove path ext
-  relativeFilePath = relativeFilePath.replace(parsedPath.ext, '')
-
-  const urlSegments = relativeFilePath.split('/').map((part, idx, arr) => {
-    const isLast = arr.length - 1 === idx
-
-    if (isLast) {
-      const match = methodRE.exec(part)
-      if (match) {
-        method = match.groups!.method.toLowerCase() || 'get'
-        part = part.replace(methodRE, '')
-      }
-    }
-
-    if (isPathParam(part)) {
-      const name = part.slice(1, -1)
-      params.push({
-        name,
-      })
-
-      return `:${name}`
-    } else {
-      return part
-    }
-  })
-
-  const urlPath = '/' + urlSegments.join('/')
-
-  return {
-    path: urlPath,
-    params,
-    method,
-  }
-}
-
-function isPathParam(pathPart: string) {
-  return pathPart[0] === '[' && pathPart[pathPart.length - 1] === ']'
+  routeInfoExtractor?: RouteInfoExtractor
 }
