@@ -136,17 +136,9 @@ export class RoutesParser {
   }
 
   getTypeParams(exportSymbol: tsm.Symbol) {
-    const valueDeclaration = exportSymbol.getValueDeclaration()
+    const fnExpression = this.getRouteDefineFn(exportSymbol)
 
-    if (!Node.isExportAssignment(valueDeclaration)) {
-      return
-    }
-
-    const initializer = valueDeclaration.getExpression()
-
-    if (!Node.isCallExpression(initializer)) {
-      return
-    }
+    if (!Node.isCallExpression(fnExpression)) return
 
     const tc = this.project.getTypeChecker()
     /**
@@ -168,10 +160,10 @@ export class RoutesParser {
      * 2. A utils function signature like `RouteDefinition` and it should have two type arguments(Req, Resp).
      */
     const args = tc
-      .getResolvedSignature(initializer)
+      .getResolvedSignature(fnExpression)
       ?.getParameters()
       .at(0)
-      ?.getTypeAtLocation(initializer)
+      ?.getTypeAtLocation(fnExpression)
       .getTypeArguments()
 
     const reqArg = args?.at(0)
@@ -180,6 +172,27 @@ export class RoutesParser {
     return {
       request: reqArg,
       response: respArg,
+    }
+  }
+
+  getRouteDefineFn(exportSymbol: tsm.Symbol) {
+    const valueDeclaration = exportSymbol.getDeclarations().at(0)
+
+    if (!Node.isExportAssignment(valueDeclaration)) {
+      return
+    }
+
+    let initializer: tsm.Node | undefined = valueDeclaration.getExpression()
+
+    if (Node.isCallExpression(initializer)) {
+      return initializer
+    }
+
+    if (Node.isIdentifier(initializer)) {
+      const node = initializer.getDefinitionNodes().at(0)
+      if (Node.isVariableDeclaration(node)) {
+        return node.getInitializer()
+      }
     }
   }
 

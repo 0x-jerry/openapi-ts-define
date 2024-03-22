@@ -38,6 +38,24 @@
       ],
       "type": "object",
     },
+    "(example/routes/export/name.ts).User" => {
+      "properties": {
+        "email": {
+          "type": "string",
+        },
+        "id": {
+          "type": "string",
+        },
+        "name": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "id",
+        "name",
+      ],
+      "type": "object",
+    },
     "(example/routes/user/[id].post.ts).User" => {
       "properties": {
         "email": {
@@ -108,6 +126,28 @@
         "properties": {
           "data": {
             "$ref": "(example/routes/user.get.ts).User",
+          },
+        },
+        "required": [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+    {
+      "method": "get",
+      "path": "/export/name",
+      "request": {
+        "body": {
+          "$ref": "(example/routes/export/name.ts).User",
+        },
+        "params": [],
+        "query": [],
+      },
+      "response": {
+        "properties": {
+          "data": {
+            "$ref": "(example/routes/export/name.ts).User",
           },
         },
         "required": [
