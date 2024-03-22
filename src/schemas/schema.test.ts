@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url'
 import fg from 'fast-glob'
 import { toSchema } from './schema'
 import type { ToSchemaContext } from './types'
+import { RefsManager } from './utils'
 
 describe('object schema', () => {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -20,7 +21,7 @@ describe('object schema', () => {
       const ctx: ToSchemaContext = {
         cwd,
         project,
-        refs: new Map(),
+        refs: new RefsManager(),
         nodeStack: [],
       }
 
@@ -43,7 +44,7 @@ describe('object schema', () => {
 
       const output = {
         schemas,
-        refs: ctx.refs,
+        refs: ctx.refs.data,
       }
 
       expect(output).toMatchFileSnapshot(outputFile)

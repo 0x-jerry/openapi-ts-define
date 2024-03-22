@@ -45,7 +45,7 @@ function convertToUrlPath(relativeFilePath: string) {
         name,
       })
 
-      return `:${name}`
+      return `{${name}}`
     } else {
       return part
     }

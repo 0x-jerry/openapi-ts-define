@@ -13,7 +13,7 @@ describe('test generate openapi schema', () => {
     })
 
     const output = {
-      refs: parser.schemaContext.refs,
+      refs: parser.schemaContext.refs.data,
       routes: parser.routes,
     }
 

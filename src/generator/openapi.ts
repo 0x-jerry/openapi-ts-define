@@ -15,9 +15,9 @@ export interface OpenAPIGeneratorConfig {
 }
 
 /**
- * https://swagger.io/specification/
+ * https://spec.openapis.org/oas/v3.0.0
  *
- * spec version: 3.1.0
+ * spec version: 3.0.0
  *
  * @param option
  * @returns
@@ -31,7 +31,7 @@ function createGenerator(option: OpenAPIGeneratorConfig) {
   const openAPIGenerator: SchemaGenerator<OpenAPI3> = (routes, refs) => {
     const apiSpec: OpenAPI3 = {
       ...option.openAPI,
-      openapi: '3.1.0',
+      openapi: '3.0.0',
       components: {
         // convert to components
         schemas: Object.fromEntries(refs.entries()) as Record<string, SchemaObject>,
@@ -48,13 +48,6 @@ function createGenerator(option: OpenAPIGeneratorConfig) {
       const opObject: OperationObject = {
         // operationId: 'todo',
         parameters: [...(pathParameters || []), ...(queryParameters || [])],
-        requestBody: {
-          content: {
-            [_config.requestType]: {
-              schema: route.request?.body as SchemaObject,
-            },
-          },
-        },
         responses: {
           '200': {
             description: 'todo',
@@ -67,10 +60,19 @@ function createGenerator(option: OpenAPIGeneratorConfig) {
         },
       }
 
+      if (['post', 'put', 'patch'].includes(route.method)) {
+        opObject.requestBody = {
+          content: {
+            [_config.requestType]: {
+              schema: route.request?.body as SchemaObject,
+            },
+          },
+        }
+      }
+
       const pathItem = getPathItem(apiSpec, route.path)
 
-      const method = route.method as 'get'
-      pathItem[method] = opObject
+      pathItem[route.method as 'get'] = opObject
     }
 
     return apiSpec

@@ -34,14 +34,13 @@ export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   const sf = node.getSourceFile()
 
   const relativePath = path.relative(ctx.cwd, sf.getFilePath()).replaceAll(path.sep, '/')
-  const refKey = `(${relativePath}).${name}`
+  const refKey = ctx.refs.getKey(relativePath, name)
 
-  // todo, change ref path
   schema.$ref = refKey
 
-  if (!ctx.refs.has(refKey)) {
+  if (!ctx.refs.has(relativePath, name)) {
     const schema = toSchema(type, ctx, { skipRefCheck: true })
-    ctx.refs.set(refKey, schema)
+    ctx.refs.set(relativePath, name, schema)
   }
 
   return schema

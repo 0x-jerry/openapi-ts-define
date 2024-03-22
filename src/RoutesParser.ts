@@ -7,7 +7,7 @@ import { toSchema } from './schemas/schema'
 import { toArray } from '@0x-jerry/utils'
 import type { RouteInfoExtractor } from './extractor/types'
 import nitroExtractor from './extractor/nitro'
-import { getDocument } from './schemas/utils'
+import { RefsManager, getDocument } from './schemas/utils'
 
 export interface RouteParserOption {
   tsconfig: string
@@ -30,7 +30,7 @@ export class RoutesParser {
     this.schemaContext = {
       cwd,
       project: this.project,
-      refs: new Map(),
+      refs: new RefsManager(),
       nodeStack: [],
     }
   }
