@@ -1,4 +1,4 @@
-import { RoutesParser } from '@/index'
+import { OpenAPIGenerator, RoutesParser } from '@/index'
 import path from 'path'
 
 describe('test generate openapi schema', () => {
@@ -16,6 +16,20 @@ describe('test generate openapi schema', () => {
       refs: parser.schemaContext.refs,
       routes: parser.routes,
     }
+
     expect(output).toMatchFileSnapshot('openapi.schema.txt')
+
+    const generator = OpenAPIGenerator({
+      openAPI: {
+        info: {
+          version: '1.0.0',
+          title: 'test spec',
+        },
+      },
+    })
+
+    const schema = generator(output.routes, output.refs)
+
+    expect(JSON.stringify(schema, null, 2)).toMatchFileSnapshot('openapi.schema.json')
   })
 })

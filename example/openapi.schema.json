@@ -1,0 +1,295 @@
+{
+  "info": {
+    "version": "1.0.0",
+    "title": "test spec"
+  },
+  "openapi": "3.1.0",
+  "components": {
+    "schemas": {
+      "(example/routes/_types.ts).User": {
+        "type": "object",
+        "description": "User doc",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "(example/routes/user.get.ts).User": {
+        "type": "object",
+        "description": "User doc",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "(example/routes/export/name.put.ts).User": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "(example/routes/user/[id].post.ts).User": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/desc": {
+      "get": {
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "description": "Email address.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "(example/routes/_types.ts).User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "todo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "description": "id doc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "(example/routes/_types.ts).User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "todo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "(example/routes/user.get.ts).User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/export/name": {
+      "put": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "(example/routes/export/name.put.ts).User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "todo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "(example/routes/export/name.put.ts).User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/methods/patch": {
+      "patch": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "(example/routes/_types.ts).User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "todo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "(example/routes/_types.ts).User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/:id": {
+      "post": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "(example/routes/user/[id].post.ts).User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "todo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "(example/routes/user/[id].post.ts).User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}
