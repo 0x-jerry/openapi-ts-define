@@ -5,9 +5,6 @@ interface Req {
   query: {
     email?: string
   }
-  params: {
-    id: string
-  }
   body: User
 }
 

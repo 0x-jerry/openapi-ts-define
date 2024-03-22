@@ -9,6 +9,9 @@ interface User {
 export default defRoute<
   {
     body: User
+    params: {
+      id: string
+    }
   },
   { data: User }
 >(() => ({} as any))

@@ -19,7 +19,7 @@
       ],
       "type": "object",
     },
-    "(example/routes/user.ts).User" => {
+    "(example/routes/user.get.ts).User" => {
       "description": "User doc",
       "properties": {
         "email": {
@@ -38,7 +38,7 @@
       ],
       "type": "object",
     },
-    "(example/routes/api/test.ts).User" => {
+    "(example/routes/user/[id].post.ts).User" => {
       "properties": {
         "email": {
           "type": "string",
@@ -65,12 +65,7 @@
         "body": {
           "$ref": "(example/routes/_types.ts).User",
         },
-        "params": [
-          {
-            "name": "id",
-            "optional": false,
-          },
-        ],
+        "params": [],
         "query": [
           {
             "name": "email",
@@ -112,7 +107,7 @@
       "response": {
         "properties": {
           "data": {
-            "$ref": "(example/routes/user.ts).User",
+            "$ref": "(example/routes/user.get.ts).User",
           },
         },
         "required": [
@@ -123,65 +118,23 @@
     },
     {
       "method": "post",
-      "path": "/user",
+      "path": "/user/:id",
       "request": {
         "body": {
-          "$ref": "(example/routes/user.ts).User",
+          "$ref": "(example/routes/user/[id].post.ts).User",
         },
-        "params": [],
-        "query": [],
-      },
-      "response": {
-        "properties": {
-          "data": {
-            "$ref": "(example/routes/user.ts).User",
-          },
-        },
-        "required": [
-          "data",
-        ],
-        "type": "object",
-      },
-    },
-    {
-      "method": "get",
-      "path": "/api/test",
-      "request": {
-        "body": undefined,
-        "params": [],
-        "query": [
+        "params": [
           {
             "name": "id",
-            "optional": true,
+            "optional": false,
           },
         ],
-      },
-      "response": {
-        "properties": {
-          "data": {
-            "$ref": "(example/routes/api/test.ts).User",
-          },
-        },
-        "required": [
-          "data",
-        ],
-        "type": "object",
-      },
-    },
-    {
-      "method": "post",
-      "path": "/api/test",
-      "request": {
-        "body": {
-          "$ref": "(example/routes/api/test.ts).User",
-        },
-        "params": [],
         "query": [],
       },
       "response": {
         "properties": {
           "data": {
-            "$ref": "(example/routes/api/test.ts).User",
+            "$ref": "(example/routes/user/[id].post.ts).User",
           },
         },
         "required": [

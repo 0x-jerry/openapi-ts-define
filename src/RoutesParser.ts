@@ -37,7 +37,9 @@ export class RoutesParser {
     for (const file of files) {
       const config = this.parseApiRouteFile(file, opt.root)
 
-      this.routes.push(...config)
+      if (config) {
+        this.routes.push(config)
+      }
     }
   }
 
@@ -46,44 +48,32 @@ export class RoutesParser {
 
     const filePath = path.join(root, relativeFilePath)
 
-    const urlPath = convertToUrlPath(relativeFilePath)
+    const routeInfo = convertToUrlPath(relativeFilePath)
 
     const routeSourceFile = project.getSourceFileOrThrow(filePath)
 
-    const methods = ['get', 'post', 'put', 'delete']
+    const exportSymbol = routeSourceFile.getDefaultExportSymbol()
 
-    const exportSymbols = routeSourceFile.getExportSymbols()
-
-    const routesConfig: RouteConfig[] = []
-
-    for (const exportSymbol of exportSymbols) {
-      const method = exportSymbol.getName()
-
-      if (!methods.includes(method)) {
-        continue
-      }
-
-      const typeParams = this.getTypeParams(exportSymbol)
-
-      if (!typeParams) {
-        continue
-      }
-
-      const reqConfig = typeParams.request
-        ? this.getRequestParameters(typeParams.request)
-        : undefined
-
-      const routeConfig: RouteConfig = {
-        path: urlPath.path,
-        method: method,
-        request: reqConfig,
-        response: this.typeToSchema(typeParams.response),
-      }
-
-      routesConfig.push(routeConfig)
+    if (!exportSymbol) {
+      return
     }
 
-    return routesConfig
+    const typeParams = this.getTypeParams(exportSymbol)
+
+    if (!typeParams) {
+      return
+    }
+
+    const reqConfig = typeParams.request ? this.getRequestParameters(typeParams.request) : undefined
+
+    const routeConfig: RouteConfig = {
+      path: routeInfo.path,
+      method: routeInfo.method,
+      request: reqConfig,
+      response: this.typeToSchema(typeParams.response),
+    }
+
+    return routeConfig
   }
 
   getRequestParameters(typeNode: tsm.Type) {
@@ -148,11 +138,11 @@ export class RoutesParser {
   getTypeParams(exportSymbol: tsm.Symbol) {
     const valueDeclaration = exportSymbol.getValueDeclaration()
 
-    if (!Node.isVariableDeclaration(valueDeclaration)) {
+    if (!Node.isExportAssignment(valueDeclaration)) {
       return
     }
 
-    const initializer = valueDeclaration.getInitializer()
+    const initializer = valueDeclaration.getExpression()
 
     if (!Node.isCallExpression(initializer)) {
       return
@@ -223,6 +213,9 @@ interface ApiRoutesConfig {
   files: string[]
 }
 
+// -------
+const methodRE = /\.(?<method>get|post|put|delete)$/i
+
 /**
  *
  * Supported path format:
@@ -238,12 +231,25 @@ interface ApiRoutesConfig {
  * @returns
  */
 function convertToUrlPath(relativeFilePath: string) {
-  // remove file extension
-  relativeFilePath = relativeFilePath.split('.')[0]
+  let method = 'get'
 
   const params: RouteRequestParam[] = []
 
-  const urlSegments = relativeFilePath.split('/').map((part) => {
+  const parsedPath = path.parse(relativeFilePath)
+  // remove path ext
+  relativeFilePath = relativeFilePath.replace(parsedPath.ext, '')
+
+  const urlSegments = relativeFilePath.split('/').map((part, idx, arr) => {
+    const isLast = arr.length - 1 === idx
+
+    if (isLast) {
+      const match = methodRE.exec(part)
+      if (match) {
+        method = match.groups!.method.toLowerCase() || 'get'
+        part = part.replace(methodRE, '')
+      }
+    }
+
     if (isPathParam(part)) {
       const name = part.slice(1, -1)
       params.push({
@@ -261,6 +267,7 @@ function convertToUrlPath(relativeFilePath: string) {
   return {
     path: urlPath,
     params,
+    method,
   }
 }
 
