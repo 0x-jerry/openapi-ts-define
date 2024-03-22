@@ -3,6 +3,9 @@ import type { User } from './_types'
 
 interface Req {
   query: {
+    /**
+     * Email address.
+     */
     email?: string
   }
   body: User

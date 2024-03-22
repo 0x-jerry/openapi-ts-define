@@ -78,7 +78,7 @@
   "routes": [
     {
       "method": "get",
-      "path": "/test",
+      "path": "/desc",
       "request": {
         "body": {
           "$ref": "(example/routes/_types.ts).User",
@@ -86,6 +86,7 @@
         "params": [],
         "query": [
           {
+            "description": "Email address.",
             "name": "email",
             "optional": true,
           },
@@ -113,10 +114,12 @@
         "params": [],
         "query": [
           {
+            "description": "id doc",
             "name": "id",
             "optional": true,
           },
           {
+            "description": undefined,
             "name": "name",
             "optional": false,
           },
@@ -165,6 +168,7 @@
         },
         "params": [
           {
+            "description": undefined,
             "name": "id",
             "optional": false,
           },

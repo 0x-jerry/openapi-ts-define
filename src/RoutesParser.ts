@@ -7,6 +7,7 @@ import { toSchema } from './schemas/schema'
 import { toArray } from '@0x-jerry/utils'
 import type { RouteInfoExtractor } from './extractor/types'
 import nitroExtractor from './extractor/nitro'
+import { getDocument } from './schemas/utils'
 
 export interface RouteParserOption {
   tsconfig: string
@@ -153,16 +154,19 @@ function parseSimpleObjectType(type?: tsm.Type): RouteRequestParam[] {
 
   for (const property of props) {
     const isOptional = property.isOptional()
+    const description = getDocument(property)
 
     names.push({
       name: property.getName(),
+      description,
       optional: !!isOptional,
     })
   }
 
   return names
 }
-interface ApiRoutesConfig {
+
+export interface ApiRoutesConfig {
   root: string
   /**
    * glob pattern

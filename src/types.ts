@@ -14,6 +14,7 @@ export interface ResponseContent {}
 
 export interface RouteRequestParam {
   name: string
+  description?: string
   optional?: boolean
 }
 
