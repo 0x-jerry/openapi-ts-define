@@ -38,7 +38,7 @@
       ],
       "type": "object",
     },
-    "(example/routes/export/name.ts).User" => {
+    "(example/routes/export/name.put.ts).User" => {
       "properties": {
         "email": {
           "type": "string",
@@ -138,11 +138,11 @@
       },
     },
     {
-      "method": "get",
+      "method": "put",
       "path": "/export/name",
       "request": {
         "body": {
-          "$ref": "(example/routes/export/name.ts).User",
+          "$ref": "(example/routes/export/name.put.ts).User",
         },
         "params": [],
         "query": [],
@@ -150,7 +150,29 @@
       "response": {
         "properties": {
           "data": {
-            "$ref": "(example/routes/export/name.ts).User",
+            "$ref": "(example/routes/export/name.put.ts).User",
+          },
+        },
+        "required": [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+    {
+      "method": "patch",
+      "path": "/methods/patch",
+      "request": {
+        "body": {
+          "$ref": "(example/routes/_types.ts).User",
+        },
+        "params": [],
+        "query": [],
+      },
+      "response": {
+        "properties": {
+          "data": {
+            "$ref": "(example/routes/_types.ts).User",
           },
         },
         "required": [

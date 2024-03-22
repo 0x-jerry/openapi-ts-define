@@ -3,7 +3,7 @@ import type { RouteRequestParam } from '../types'
 import type { RouteInfoExtractor, RouteInfo } from './types'
 import tsm, { Node } from 'ts-morph'
 
-const methodRE = /\.(?<method>get|post|put|delete)$/i
+const methodRE = /\.(?<method>get|post|put|delete|patch)$/i
 
 /**
  *
