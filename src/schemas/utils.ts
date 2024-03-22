@@ -14,26 +14,33 @@ function getSymbolDoc(sy?: tsm.Symbol) {
   return sy?.compilerSymbol.getDocumentationComment(undefined).at(0)?.text
 }
 
-export class RefsManager implements ReferenceManager<JSONSchema7> {
+export abstract class SimpleRefsManager implements ReferenceManager<JSONSchema7> {
   data = new Map<string, JSONSchema7>()
 
   has(path: string, typeName: string): boolean {
-    const p = this.getKey(path, typeName)
-    return this.data.has(p)
+    return this.data.has(this.getDataKey(path, typeName))
   }
 
+  // todo, maybe do not need this function.
   get(path: string, typeName: string): JSONSchema7 | undefined {
-    const p = this.getKey(path, typeName)
-    return this.data.get(p)
+    return this.data.get(this.getDataKey(path, typeName))
   }
 
   set(path: string, typeName: string, data: JSONSchema7): void {
-    const p = this.getKey(path, typeName)
-
-    this.data.set(p, data)
+    this.data.set(this.getDataKey(path, typeName), data)
   }
 
-  getKey(path: string, typeName: string): string {
+  abstract getDataKey(path: string, typeName: string): string
+
+  abstract getRefKey(path: string, typeName: string): string
+}
+
+export class RefsManager extends SimpleRefsManager {
+  getDataKey(path: string, typeName: string): string {
+    return this.getRefKey(path, typeName)
+  }
+
+  getRefKey(path: string, typeName: string): string {
     return `(${path}).${typeName}`
   }
 }

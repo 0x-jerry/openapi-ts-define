@@ -6,7 +6,7 @@
   "openapi": "3.0.0",
   "components": {
     "schemas": {
-      "(example/routes/_types.ts).User": {
+      "User": {
         "type": "object",
         "description": "User doc",
         "required": [
@@ -25,7 +25,7 @@
           }
         }
       },
-      "(example/routes/user.get.ts).User": {
+      "User00": {
         "type": "object",
         "description": "User doc",
         "required": [
@@ -44,7 +44,7 @@
           }
         }
       },
-      "(example/routes/export/name.put.ts).User": {
+      "User01": {
         "type": "object",
         "required": [
           "id",
@@ -62,7 +62,7 @@
           }
         }
       },
-      "(example/routes/user/[id].post.ts).User": {
+      "User02": {
         "type": "object",
         "required": [
           "id",
@@ -151,7 +151,7 @@
                   ],
                   "properties": {
                     "data": {
-                      "$ref": "(example/routes/user.get.ts).User"
+                      "$ref": "#/components/schemas/User00"
                     }
                   }
                 }
@@ -176,7 +176,7 @@
                   ],
                   "properties": {
                     "data": {
-                      "$ref": "(example/routes/export/name.put.ts).User"
+                      "$ref": "#/components/schemas/User01"
                     }
                   }
                 }
@@ -188,7 +188,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "(example/routes/export/name.put.ts).User"
+                "$ref": "#/components/schemas/User01"
               }
             }
           }
@@ -210,7 +210,7 @@
                   ],
                   "properties": {
                     "data": {
-                      "$ref": "(example/routes/_types.ts).User"
+                      "$ref": "#/components/schemas/User"
                     }
                   }
                 }
@@ -222,7 +222,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "(example/routes/_types.ts).User"
+                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -253,7 +253,7 @@
                   ],
                   "properties": {
                     "data": {
-                      "$ref": "(example/routes/user/[id].post.ts).User"
+                      "$ref": "#/components/schemas/User02"
                     }
                   }
                 }
@@ -265,7 +265,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "(example/routes/user/[id].post.ts).User"
+                "$ref": "#/components/schemas/User02"
               }
             }
           }

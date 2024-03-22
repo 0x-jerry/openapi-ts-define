@@ -2,7 +2,7 @@ import tsm, { Project } from 'ts-morph'
 import fg from 'fast-glob'
 import path from 'path'
 import type { RouteConfig, RouteRequestParam } from './types'
-import type { ToSchemaContext } from './schemas/types'
+import type { ReferenceManager, ToSchemaContext } from './schemas/types'
 import { toSchema } from './schemas/schema'
 import { toArray } from '@0x-jerry/utils'
 import type { RouteInfoExtractor } from './extractor/types'
@@ -11,6 +11,7 @@ import { RefsManager, getDocument } from './schemas/utils'
 
 export interface RouteParserOption {
   tsconfig: string
+  refsManager?: ReferenceManager
 }
 
 export class RoutesParser {
@@ -30,7 +31,7 @@ export class RoutesParser {
     this.schemaContext = {
       cwd,
       project: this.project,
-      refs: new RefsManager(),
+      refs: option.refsManager ?? new RefsManager(),
       nodeStack: [],
     }
   }

@@ -1,5 +1,6 @@
+import { RefsManager, SimpleRefsManager } from '@/schemas/utils'
 import type { RouteRequestParam } from '..'
-import type { SchemaGenerator } from './types'
+import type { SchemaGenerator, SchemaGeneratorContext } from './types'
 import type {
   OpenAPI3,
   PathItemObject,
@@ -28,7 +29,7 @@ function createGenerator(option: OpenAPIGeneratorConfig) {
     responseType: 'application/json',
   }
 
-  const openAPIGenerator: SchemaGenerator<OpenAPI3> = (routes, refs) => {
+  const generateOpenAPI: SchemaGenerator<OpenAPI3> = (routes, refs) => {
     const apiSpec: OpenAPI3 = {
       ...option.openAPI,
       openapi: '3.0.0',
@@ -78,7 +79,49 @@ function createGenerator(option: OpenAPIGeneratorConfig) {
     return apiSpec
   }
 
-  return openAPIGenerator
+  const ctx: SchemaGeneratorContext<OpenAPI3> = {
+    refsManager: new OpenAPIRefsManager(),
+    generate: generateOpenAPI,
+  }
+
+  return ctx
+}
+
+class OpenAPIRefsManager extends SimpleRefsManager {
+  keyMap = new Map<string, string>()
+
+  keys = new Set<string>()
+
+  getDataKey(path: string, typeName: string): string {
+    return this.calcKey(path, typeName)
+  }
+
+  getRefKey(path: string, typeName: string): string {
+    const key = this.calcKey(path, typeName)
+
+    return `#/components/schemas/${key}`
+  }
+
+  calcKey(path: string, typeName: string): string {
+    const uniqueName = path + typeName
+
+    if (this.keyMap.has(uniqueName)) {
+      return this.keyMap.get(uniqueName)!
+    }
+
+    let key = typeName
+    let idx = 0
+
+    while (this.keys.has(key)) {
+      key = typeName + idx.toString().padStart(2, '0')
+      idx++
+    }
+
+    this.keys.add(key)
+    this.keyMap.set(uniqueName, key)
+
+    return key
+  }
 }
 
 function getPathItem(openapi: OpenAPI3, path: string) {
