@@ -60,7 +60,7 @@
   "routes": [
     {
       "method": "get",
-      "path": "/",
+      "path": "/test",
       "request": {
         "body": {
           "$ref": "(example/routes/_types.ts).User",

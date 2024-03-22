@@ -1,4 +1,4 @@
-import type { JSONSchema7 } from "json-schema"
+import type { JSONSchema7 } from 'json-schema'
 
 export interface RequestParams<
   Body extends Record<string, any> = {},
@@ -10,10 +10,9 @@ export interface RequestParams<
   body?: Body
 }
 
-export interface ResponseContent { }
+export interface ResponseContent {}
 
-
-export interface RouteReqeustQuery {
+export interface RouteRequestParam {
   name: string
   optional?: boolean
 }
@@ -23,8 +22,8 @@ export interface RouteConfig {
   method: string
 
   request?: {
-    query?: RouteReqeustQuery[]
-    params?: RouteReqeustQuery[]
+    query?: RouteRequestParam[]
+    params?: RouteRequestParam[]
 
     // todo, should be a json schema or ref schema
     body?: JSONSchema7

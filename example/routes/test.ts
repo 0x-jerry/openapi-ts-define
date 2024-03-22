@@ -11,7 +11,7 @@ interface Req {
   body: User
 }
 
-export const get = defRoute((_req: Req, _ctx) => {
+export default defRoute((_req: Req, _ctx) => {
   return {
     data: 'hello',
   }

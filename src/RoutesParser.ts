@@ -1,7 +1,7 @@
 import tsm, { Project, Node, SyntaxKind } from 'ts-morph'
 import fg from 'fast-glob'
 import path from 'path'
-import type { RouteConfig, RouteReqeustQuery } from './types'
+import type { RouteConfig, RouteRequestParam } from './types'
 import type { ToSchemaContext } from './schemas/types'
 import { toSchema } from './schemas/schema'
 
@@ -193,8 +193,8 @@ export class RoutesParser {
     }
   }
 
-  parseSimpleObjectType(type?: tsm.Type): RouteReqeustQuery[] {
-    const names: RouteReqeustQuery[] = []
+  parseSimpleObjectType(type?: tsm.Type): RouteRequestParam[] {
+    const names: RouteRequestParam[] = []
 
     if (!type) {
       return names
@@ -223,19 +223,47 @@ interface ApiRoutesConfig {
   files: string[]
 }
 
+/**
+ *
+ * Supported path format:
+ *
+ * - api/hello.ts => GET /api/hello
+ * - api/hello.get.ts => GET /api/hello
+ * - api/hello.post.ts => POST /api/hello
+ * - api/user/[id].get.ts => GET /api/user/:id
+ * - api/user/[id].post.ts => POST /api/user/:id
+ * - api/user/[id]/[name].put.ts => PUT /api/user/:id/:name
+ *
+ * @param relativeFilePath
+ * @returns
+ */
 function convertToUrlPath(relativeFilePath: string) {
-  const parsedPath = path.parse(relativeFilePath)
-  // todo, parse request params
-  const urlSegments = parsedPath.dir.split(path.sep)
+  // remove file extension
+  relativeFilePath = relativeFilePath.split('.')[0]
 
-  if (parsedPath.name !== 'index') {
-    urlSegments.push(parsedPath.name)
-  }
+  const params: RouteRequestParam[] = []
 
-  let urlPath = urlSegments.join('/')
-  urlPath = urlPath[0] === '/' ? urlPath : '/' + urlPath
+  const urlSegments = relativeFilePath.split('/').map((part) => {
+    if (isPathParam(part)) {
+      const name = part.slice(1, -1)
+      params.push({
+        name,
+      })
+
+      return `:${name}`
+    } else {
+      return part
+    }
+  })
+
+  const urlPath = '/' + urlSegments.join('/')
 
   return {
     path: urlPath,
+    params,
   }
+}
+
+function isPathParam(pathPart: string) {
+  return pathPart[0] === '[' && pathPart[pathPart.length - 1] === ']'
 }
