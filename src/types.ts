@@ -29,4 +29,8 @@ export interface RouteConfig {
   }
 
   response?: JSONSchema7
+
+  meta: {
+    filepath: string
+  }
 }

@@ -74,6 +74,9 @@ export class RoutesParser {
         method: routeInfo.method,
         request: reqConfig,
         response: this.typeToSchema(typeParams.response),
+        meta: {
+          filepath: relativeFilePath,
+        },
       }
 
       return routeConfig
