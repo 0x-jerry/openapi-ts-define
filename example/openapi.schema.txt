@@ -109,6 +109,35 @@
     },
     {
       "meta": {
+        "filepath": "index.ts",
+      },
+      "method": "get",
+      "path": "/",
+      "request": {
+        "body": undefined,
+        "params": [],
+        "query": [
+          {
+            "description": undefined,
+            "name": "id",
+            "optional": false,
+          },
+        ],
+      },
+      "response": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/User",
+          },
+        },
+        "required": [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+    {
+      "meta": {
         "filepath": "user.get.ts",
       },
       "method": "get",
