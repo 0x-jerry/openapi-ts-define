@@ -1,10 +1,16 @@
 import type { JSONSchema7 } from 'json-schema'
 import tsm from 'ts-morph'
+import { getDocument } from './utils'
 
 type EnumValue = string | number | boolean | null
 
 export function toEnumSchema(node: tsm.Type): JSONSchema7 {
   const schema: JSONSchema7 = {}
+
+  const doc = getDocument(node)
+  if (doc) {
+    schema.description = doc
+  }
 
   const types = node.getUnionTypes()
 

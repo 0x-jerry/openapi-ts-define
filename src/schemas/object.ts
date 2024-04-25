@@ -14,8 +14,8 @@ export function toObjectSchema(
 
   const propertiesSchema: Record<string, JSONSchema7> = {}
 
-  const description = getDocument(type)
-  if (description) schema.description = description
+  const doc = getDocument(type)
+  if (doc) schema.description = doc
 
   const props = type.getProperties()
 
@@ -60,9 +60,9 @@ function generatePropSchema(prop: tsm.Symbol, ctx: ToSchemaContext): { schema: J
 
   const propSchema = toSchema(propType, ctx)
 
-  const description = getDocument(prop)
-  if (description) {
-    propSchema.description = description
+  const doc = getDocument(prop)
+  if (doc) {
+    propSchema.description = doc
   }
 
   return {

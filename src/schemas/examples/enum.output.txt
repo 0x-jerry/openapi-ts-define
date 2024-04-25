@@ -1,6 +1,7 @@
 {
   "refs": Map {
     "(enum.ts).Values" => {
+      "description": "Switch Value",
       "enum": [
         0,
         1,

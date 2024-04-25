@@ -20,6 +20,7 @@
       ],
     },
     {
+      "description": "docs",
       "oneOf": [
         {
           "const": false,

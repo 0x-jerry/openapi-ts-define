@@ -1,6 +1,7 @@
 {
   "refs": Map {
     "(enum.ts).Values" => {
+      "description": "Switch Value",
       "enum": [
         0,
         1,
@@ -111,6 +112,7 @@
       "$ref": "(refs.ts).B",
     },
     {
+      "description": "type ref",
       "oneOf": [
         {
           "type": "string",
