@@ -28,7 +28,7 @@
     "dist"
   ],
   "devDependencies": {
-    "@0x-jerry/x-release": "^1.0.0",
+    "@0x-jerry/x-release": "^2.0.0",
     "@types/json-schema": "^7.0.15",
     "@types/node": "^20.12.7",
     "@vitest/coverage-v8": "^1.5.1",
