@@ -12,8 +12,8 @@ dependencies:
     specifier: ^3.3.2
     version: 3.3.2
   ts-morph:
-    specifier: ^22.0.0
-    version: 22.0.0
+    specifier: ^23.0.0
+    version: 23.0.0
 
 devDependencies:
   '@0x-jerry/x-release':
@@ -749,8 +749,8 @@ packages:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
 
-  /@ts-morph/common@0.23.0:
-    resolution: {integrity: sha512-m7Lllj9n/S6sOkCkRftpM7L24uvmfXQFedlW/4hENcuJH1HHm9u5EgxZb9uVjQSCGrbBWBkOGgcTxNg36r6ywA==}
+  /@ts-morph/common@0.24.0:
+    resolution: {integrity: sha512-c1xMmNHWpNselmpIqursHeOHHBTIsJLbB+NuovbTTRCNiTLEr/U9dbJ8qy0jd/O2x5pc3seWuOUN5R2IoOTp8A==}
     dependencies:
       fast-glob: 3.3.2
       minimatch: 9.0.4
@@ -1985,10 +1985,10 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /ts-morph@22.0.0:
-    resolution: {integrity: sha512-M9MqFGZREyeb5fTl6gNHKZLqBQA0TjA1lea+CR48R8EBTDuWrNqW6ccC5QvjNR4s6wDumD3LTCjOFSp9iwlzaw==}
+  /ts-morph@23.0.0:
+    resolution: {integrity: sha512-FcvFx7a9E8TUe6T3ShihXJLiJOiqyafzFKUO4aqIHDUCIvADdGNShcbc2W5PMr3LerXRv7mafvFZ9lRENxJmug==}
     dependencies:
-      '@ts-morph/common': 0.23.0
+      '@ts-morph/common': 0.24.0
       code-block-writer: 13.0.1
     dev: false
 
