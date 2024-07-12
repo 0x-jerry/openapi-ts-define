@@ -93,32 +93,33 @@ const nitroExtractor: RouteInfoExtractor = (source, ctx) => {
 
   return routeConfig
 
-  function getRouteDefineNode(exportSymbol: tsm.Symbol) {
-    const exportAssignment = exportSymbol.getDeclarations().at(0)
+}
 
-    if (!Node.isExportAssignment(exportAssignment)) {
-      return
-    }
+function getRouteDefineNode(exportSymbol: tsm.Symbol) {
+  const exportAssignment = exportSymbol.getDeclarations().at(0)
 
-    const initializer = exportAssignment.getExpression()
+  if (!Node.isExportAssignment(exportAssignment)) {
+    return
+  }
 
-    /**
-     * export default defRoute(() => ...)
-     */
-    if (Node.isCallExpression(initializer)) {
-      return initializer
-    }
+  const initializer = exportAssignment.getExpression()
 
-    /**
-     * const handler = defRoute(() => ...)
-     *
-     * export default handler
-     */
-    if (Node.isIdentifier(initializer)) {
-      const node = initializer.getDefinitionNodes().at(0)
-      if (Node.isVariableDeclaration(node)) {
-        return node.getInitializer()
-      }
+  /**
+   * export default defRoute(() => ...)
+   */
+  if (Node.isCallExpression(initializer)) {
+    return initializer
+  }
+
+  /**
+   * const handler = defRoute(() => ...)
+   *
+   * export default handler
+   */
+  if (Node.isIdentifier(initializer)) {
+    const node = initializer.getDefinitionNodes().at(0)
+    if (Node.isVariableDeclaration(node)) {
+      return node.getInitializer()
     }
   }
 }
