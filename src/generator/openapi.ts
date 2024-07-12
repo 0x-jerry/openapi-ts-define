@@ -1,4 +1,4 @@
-import { RefsManager, SimpleRefsManager } from '@/schemas/utils'
+import { SimpleRefsManager } from '../schemas/utils'
 import type { RouteRequestParam } from '..'
 import type { SchemaGenerator, SchemaGeneratorContext } from './types'
 import type {

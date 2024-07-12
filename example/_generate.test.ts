@@ -1,4 +1,4 @@
-import { OpenAPIGenerator, RoutesParser } from '@/index'
+import { OpenAPIGenerator, RoutesParser } from '../src'
 import path from 'path'
 
 describe('test generate openapi schema', () => {
