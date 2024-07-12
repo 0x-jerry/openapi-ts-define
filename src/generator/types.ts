@@ -1,6 +1,6 @@
 import type { JSONSchema7 } from 'json-schema'
 import type { RouteConfig } from '../types'
-import type { ReferenceManager } from '@/schemas/types'
+import type { ReferenceManager } from 'src/schemas/types'
 
 export interface SchemaGeneratorContext<T> {
   refsManager?: ReferenceManager
