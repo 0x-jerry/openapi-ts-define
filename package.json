@@ -1,8 +1,8 @@
 {
   "name": "openapi-ts-define",
   "version": "0.2.2",
-  "description": "",
-  "main": "dist/index.ts",
+  "description": "This package provide a way to extract api route information based on AST.",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "packageManager": "pnpm@8.15.8",
