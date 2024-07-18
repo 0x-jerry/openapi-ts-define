@@ -2,21 +2,22 @@ import type { OpenAPIGeneratorConfig } from '../generator/openapi'
 import { OpenAPIGenerator, RoutesParser } from '..'
 import type { ApiRoutesConfig } from '../RoutesParser'
 
-export interface OpenapiPresetOption {
+export interface OpenapiPresetOption extends OpenAPIGeneratorConfig, ApiRoutesConfig {
+  /**
+   * Path to tsconfig.json, relative path
+   */
   tsconfig: string
-  openapi: OpenAPIGeneratorConfig
-  routes: ApiRoutesConfig
 }
 
 export function openapiPreset(opt: OpenapiPresetOption) {
-  const generator = OpenAPIGenerator(opt.openapi)
+  const generator = OpenAPIGenerator(opt)
 
   const parser = new RoutesParser({
     tsconfig: opt.tsconfig,
     refsManager: generator.refsManager!,
   })
 
-  parser.parse(opt.routes)
+  parser.parse(opt)
 
   const routes = parser.routes
 

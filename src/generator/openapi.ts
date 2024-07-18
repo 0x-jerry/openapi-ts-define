@@ -12,6 +12,9 @@ import type {
 type PartialOpenAPIConfig = Omit<OpenAPI3, 'paths' | 'components' | 'tags' | 'openapi'>
 
 export interface OpenAPIGeneratorConfig {
+  /**
+   * OpenAPI schema config
+   */
   openAPI: PartialOpenAPIConfig
 }
 

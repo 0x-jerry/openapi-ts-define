@@ -18,8 +18,8 @@ describe('test generate openapi schema', () => {
     })
 
     parser.parse({
-      root: path.resolve('example/routes'),
-      files: ['**/*.ts', '!**/_*.ts'],
+      routesRoot: path.resolve('example/routes'),
+      matchFiles: ['**/*.ts', '!**/_*.ts'],
     })
 
     const output = {

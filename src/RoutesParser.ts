@@ -39,10 +39,10 @@ export class RoutesParser {
   parse(opt: ApiRoutesConfig) {
     const extractor = opt.routeInfoExtractor ?? nitroExtractor
 
-    const files = fg.sync(opt.files, { cwd: opt.root })
+    const files = fg.sync(opt.matchFiles, { cwd: opt.routesRoot })
 
     for (const file of files) {
-      const config = this.parseApiRouteFile(file, opt.root, extractor)
+      const config = this.parseApiRouteFile(file, opt.routesRoot, extractor)
 
       this.routes.push(...config)
     }
@@ -171,10 +171,16 @@ function parseSimpleObjectType(type?: tsm.Type): RouteRequestParam[] {
 }
 
 export interface ApiRoutesConfig {
-  root: string
   /**
-   * glob pattern
+   * Routes directory
    */
-  files: string[]
+  routesRoot: string
+  /**
+   * Glob pattern
+   */
+  matchFiles: string[]
+  /**
+   * Extract route info
+   */
   routeInfoExtractor?: RouteInfoExtractor
 }
