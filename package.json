@@ -30,13 +30,13 @@
   "devDependencies": {
     "@0x-jerry/x-release": "^2.2.2",
     "@types/json-schema": "^7.0.15",
-    "@types/node": "^20.14.10",
-    "@vitest/coverage-v8": "^2.0.2",
-    "openapi-typescript": "^7.0.2",
-    "tsup": "^8.1.0",
+    "@types/node": "^20.14.11",
+    "@vitest/coverage-v8": "^2.0.3",
+    "openapi-typescript": "^7.0.4",
+    "tsup": "^8.1.2",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
-    "vitest": "^2.0.2"
+    "vitest": "^2.0.3"
   },
   "dependencies": {
     "@0x-jerry/utils": "^2.4.2",

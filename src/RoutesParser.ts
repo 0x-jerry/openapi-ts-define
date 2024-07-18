@@ -4,10 +4,10 @@ import path from 'path'
 import type { RouteConfig, RouteRequestParam } from './types'
 import type { ReferenceManager, ToSchemaContext } from './schemas/types'
 import { toSchema } from './schemas/schema'
-import { toArray } from '@0x-jerry/utils'
 import type { RouteInfoExtractor } from './extractor/types'
 import nitroExtractor from './extractor/nitro'
 import { RefsManager, getDocument } from './schemas/utils'
+import { ensureArray } from '@0x-jerry/utils'
 
 export interface RouteParserOption {
   tsconfig: string
@@ -62,7 +62,7 @@ export class RoutesParser {
 
     if (!routeInfos) return []
 
-    return toArray(routeInfos).map((routeInfo) => {
+    return ensureArray(routeInfos).map((routeInfo) => {
       const typeParams = this.getRouteTypes(routeInfo.routeDefineAST)
 
       const reqConfig = typeParams.request
