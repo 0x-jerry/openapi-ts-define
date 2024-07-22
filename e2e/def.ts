@@ -8,5 +8,5 @@ interface RouteDefinition<Req, Resp> {
 export function defRoute<Req extends RequestParams = {}, Resp extends Record<string, any> = {}>(
   fn: RouteDefinition<Req, Resp>
 ) {
-  // todo
+  // ignore
 }
