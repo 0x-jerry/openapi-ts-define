@@ -38,7 +38,7 @@
         ],
         "responses": {
           "200": {
-            "description": "todo",
+            "description": "Response",
             "content": {
               "application/json": {
                 "schema": {

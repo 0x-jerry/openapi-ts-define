@@ -50,11 +50,10 @@ function createGenerator(option: OpenAPIGeneratorConfig) {
       const queryParameters = route.request?.query?.map((n) => toParameterObject(n, 'query'))
 
       const opObject: OperationObject = {
-        // operationId: 'todo',
         parameters: [...(pathParameters || []), ...(queryParameters || [])],
         responses: {
           '200': {
-            description: 'todo',
+            description: 'Response',
             content: {
               [_config.responseType]: {
                 schema: route.response as SchemaObject,
