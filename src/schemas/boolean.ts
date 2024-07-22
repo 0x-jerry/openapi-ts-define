@@ -4,7 +4,7 @@ import { getDocument } from './utils'
 
 export function toBooleanSchema(node: tsm.Type): JSONSchema7 {
   const schema: JSONSchema7 = {
-    type: 'boolean'
+    type: 'boolean',
   }
 
   const doc = getDocument(node)
@@ -13,7 +13,7 @@ export function toBooleanSchema(node: tsm.Type): JSONSchema7 {
   }
 
   if (node.isBooleanLiteral()) {
-    schema.const = node.getText() === 'true'
+    schema.enum = [node.getText() === 'true']
   }
 
   return schema

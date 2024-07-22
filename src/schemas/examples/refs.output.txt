@@ -73,11 +73,15 @@
               "type": "number",
             },
             {
-              "const": false,
+              "enum": [
+                false,
+              ],
               "type": "boolean",
             },
             {
-              "const": true,
+              "enum": [
+                true,
+              ],
               "type": "boolean",
             },
           ],
@@ -86,7 +90,9 @@
           "type": "number",
         },
         "C": {
-          "const": 1,
+          "enum": [
+            1,
+          ],
           "type": "number",
         },
         "E": {
@@ -121,11 +127,15 @@
           "type": "number",
         },
         {
-          "const": false,
+          "enum": [
+            false,
+          ],
           "type": "boolean",
         },
         {
-          "const": true,
+          "enum": [
+            true,
+          ],
           "type": "boolean",
         },
         {

@@ -4,7 +4,7 @@ import { getDocument } from './utils'
 
 export function toNumberSchema(node: tsm.Type): JSONSchema7 {
   const schema: JSONSchema7 = {
-    type: 'number'
+    type: 'number',
   }
 
   const doc = getDocument(node)
@@ -13,7 +13,7 @@ export function toNumberSchema(node: tsm.Type): JSONSchema7 {
   }
 
   if (node.isNumberLiteral()) {
-    schema.const = node.getLiteralValue() as number
+    schema.enum = [node.getLiteralValue() as number]
   }
 
   return schema

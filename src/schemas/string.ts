@@ -13,7 +13,7 @@ export function toStringSchema(node: tsm.Type): JSONSchema7 {
   }
 
   if (node.isStringLiteral()) {
-    schema.const = node.getLiteralValue() as string
+    schema.enum = [node.getLiteralValue() as string]
   }
 
   return schema

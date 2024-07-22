@@ -10,11 +10,15 @@
           "type": "number",
         },
         {
-          "const": false,
+          "enum": [
+            false,
+          ],
           "type": "boolean",
         },
         {
-          "const": true,
+          "enum": [
+            true,
+          ],
           "type": "boolean",
         },
       ],
@@ -23,23 +27,33 @@
       "description": "docs",
       "oneOf": [
         {
-          "const": false,
+          "enum": [
+            false,
+          ],
           "type": "boolean",
         },
         {
-          "const": 1,
+          "enum": [
+            1,
+          ],
           "type": "number",
         },
         {
-          "const": 3,
+          "enum": [
+            3,
+          ],
           "type": "number",
         },
         {
-          "const": "X",
+          "enum": [
+            "X",
+          ],
           "type": "string",
         },
         {
-          "const": "y",
+          "enum": [
+            "y",
+          ],
           "type": "string",
         },
       ],
@@ -52,7 +66,9 @@
         {
           "properties": {
             "a": {
-              "const": 1,
+              "enum": [
+                1,
+              ],
               "type": "number",
             },
           },
@@ -64,7 +80,9 @@
         {
           "properties": {
             "b": {
-              "const": 1,
+              "enum": [
+                1,
+              ],
               "type": "number",
             },
           },

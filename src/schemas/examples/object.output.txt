@@ -57,23 +57,33 @@
     "(object.ts).LiteralValueObject" => {
       "properties": {
         "False": {
-          "const": false,
+          "enum": [
+            false,
+          ],
           "type": "boolean",
         },
         "Num": {
-          "const": 1111,
+          "enum": [
+            1111,
+          ],
           "type": "number",
         },
         "Str": {
-          "const": "string",
+          "enum": [
+            "string",
+          ],
           "type": "string",
         },
         "TemplateStr": {
-          "const": "ssss",
+          "enum": [
+            "ssss",
+          ],
           "type": "string",
         },
         "True": {
-          "const": true,
+          "enum": [
+            true,
+          ],
           "type": "boolean",
         },
         "obj": {
