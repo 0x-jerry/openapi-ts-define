@@ -4,10 +4,7 @@ import { toSchema } from './schema'
 import { getDocument } from './utils'
 import type { ToSchemaContext } from './types'
 
-export function toObjectSchema(
-  type: tsm.Type,
-  ctx: ToSchemaContext
-): JSONSchema7 {
+export function toObjectSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   const schema: JSONSchema7 = {
     type: 'object',
   }
@@ -42,7 +39,10 @@ export function toObjectSchema(
   return schema
 }
 
-function generatePropSchema(prop: tsm.Symbol, ctx: ToSchemaContext): { schema: JSONSchema7, required: boolean } | false {
+function generatePropSchema(
+  prop: tsm.Symbol,
+  ctx: ToSchemaContext
+): { schema: JSONSchema7; required: boolean } | false {
   const currentNode = ctx.nodeStack.at(-1)!
   const isOptional = prop.isOptional()
 
@@ -67,6 +67,6 @@ function generatePropSchema(prop: tsm.Symbol, ctx: ToSchemaContext): { schema: J
 
   return {
     schema: propSchema,
-    required: !isOptional
+    required: !isOptional,
   }
 }
