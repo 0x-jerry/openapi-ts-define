@@ -1,4 +1,4 @@
-export type G<T> = {
+type G<T> = {
   a: number
   t: T
 }

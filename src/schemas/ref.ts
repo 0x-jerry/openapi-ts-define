@@ -15,11 +15,14 @@ export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
     $ref: '',
   }
 
-  const sy = type.getSymbol() || type.getAliasSymbol()
+  const sy = type.getAliasSymbol() || type.getSymbol()
   const node = sy?.getDeclarations().at(0)
 
   const supportedType =
-    Node.isInterfaceDeclaration(node) || Node.isTypeLiteral(node) || Node.isEnumDeclaration(node)
+    Node.isEnumDeclaration(node) ||
+    Node.isInterfaceDeclaration(node) ||
+    Node.isTypeLiteral(node) ||
+    Node.isTypeAliasDeclaration(node)
 
   if (!supportedType) {
     return toSchema(type, ctx, { skipRefCheck: true })
@@ -39,14 +42,20 @@ export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   schema.$ref = refKey
 
   if (!ctx.refs.has(relativePath, name)) {
-    const schema = toSchema(type, ctx, { skipRefCheck: true })
+    const schema = toSchema(node, ctx, { skipRefCheck: true })
     ctx.refs.set(relativePath, name, schema)
   }
 
   return schema
 }
 
-function getNodeName(node: tsm.InterfaceDeclaration | tsm.TypeLiteralNode | tsm.EnumDeclaration) {
+function getNodeName(
+  node:
+    | tsm.InterfaceDeclaration
+    | tsm.TypeLiteralNode
+    | tsm.EnumDeclaration
+    | tsm.TypeAliasDeclaration
+) {
   if (Node.isTypeLiteral(node)) {
     const parentNode = node.getParent()
     if (Node.isTypeAliasDeclaration(parentNode)) {

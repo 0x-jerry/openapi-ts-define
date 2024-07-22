@@ -1,5 +1,5 @@
 import type { JSONSchema7 } from 'json-schema'
-import tsm from 'ts-morph'
+import tsm, { Node } from 'ts-morph'
 import type { ToSchemaContext } from './types'
 
 import { toObjectSchema } from './object'
@@ -59,10 +59,23 @@ function _toSchema(type: tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption
     return toNumberSchema(type)
   }
 
-  const shcmea: JSONSchema7 = {}
-  return shcmea
+  const schema: JSONSchema7 = {}
+  return schema
 }
 
 function isRefType(type: tsm.Type, ctx: ToSchemaContext) {
-  return !type.isAnonymous() || !!type.getSymbol()
+  const node = (type.getAliasSymbol() || type.getSymbol())?.getDeclarations().at(0)
+  if (Node.isInterfaceDeclaration(node)) {
+    return node.getType().getTypeArguments().length === 0
+  }
+
+  if (Node.isTypeReference(node)) {
+    return node.getType().getTypeArguments().length === 0
+  }
+
+  if (Node.isTypeAliasDeclaration(node)) {
+    return node.getType().getTypeArguments().length === 0
+  }
+
+  return false
 }

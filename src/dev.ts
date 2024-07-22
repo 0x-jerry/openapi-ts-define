@@ -21,15 +21,8 @@ const absFile = path.join(cwd, 'generic.ts')
 
 const source = project.getSourceFileOrThrow(absFile)
 
-const types = source
-  .getStatements()
-  .filter(
-    (node) =>
-      Node.isInterfaceDeclaration(node) ||
-      Node.isTypeAliasDeclaration(node) ||
-      Node.isEnumDeclaration(node)
-  )
+const exportNodes = source.getExportSymbols().map((item) => item.getDeclarations().at(0)!)
 
-const schemas = types.map((n) => toSchema(n, ctx))
+const schemas = exportNodes.map((n) => toSchema(n, ctx))
 
 console.log(JSON.stringify(schemas, null, 2))

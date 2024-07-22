@@ -1,0 +1,40 @@
+{
+  "refs": Map {
+    "(generic.ts).G" => {
+      "properties": {
+        "a": {
+          "type": "number",
+        },
+        "t": {},
+      },
+      "required": [
+        "a",
+        "t",
+      ],
+      "type": "object",
+    },
+    "(generic.ts).A" => {
+      "properties": {
+        "a": {
+          "type": "number",
+        },
+        "t": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "a",
+        "t",
+      ],
+      "type": "object",
+    },
+  },
+  "schemas": [
+    {
+      "$ref": "(generic.ts).G",
+    },
+    {
+      "$ref": "(generic.ts).A",
+    },
+  ],
+}
