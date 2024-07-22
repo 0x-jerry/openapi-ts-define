@@ -9,6 +9,7 @@ export interface RouteInfoExtractorContext {
 export interface RouteInfo {
   path: string
   method: string
+  description?: string
   routeDefineAST: tsm.CallExpression
 }
 

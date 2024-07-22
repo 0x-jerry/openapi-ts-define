@@ -21,6 +21,7 @@ export interface RouteRequestParam {
 export interface RouteConfig {
   path: string
   method: string
+  description?: string
 
   request?: {
     query?: RouteRequestParam[]

@@ -2,6 +2,7 @@ import path from 'path'
 import type { RouteRequestParam } from '../types'
 import type { RouteInfoExtractor, RouteInfo } from './types'
 import tsm, { Node } from 'ts-morph'
+import { getDocument } from '../schemas/utils'
 
 const methodRE = /\.(?<method>get|post|put|delete|patch)$/i
 
@@ -86,13 +87,13 @@ const nitroExtractor: RouteInfoExtractor = (source, ctx) => {
   const routeInfo = _convertToUrlPath(ctx.path)
 
   const routeConfig: RouteInfo = {
+    description: getDocument(exportSymbol),
     path: routeInfo.path,
     method: routeInfo.method,
     routeDefineAST: node,
   }
 
   return routeConfig
-
 }
 
 function getRouteDefineNode(exportSymbol: tsm.Symbol) {

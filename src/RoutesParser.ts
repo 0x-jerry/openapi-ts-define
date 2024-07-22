@@ -79,6 +79,10 @@ export class RoutesParser {
         },
       }
 
+      if (routeInfo.description) {
+        routeConfig.description = routeInfo.description
+      }
+
       return routeConfig
     })
   }
@@ -126,9 +130,9 @@ export class RoutesParser {
      *
      * const get = defineRoute((req: RequestType) => {} as ReturnType)
      * ```
-     * There are two limitations:
+     * Those need two restriction:
      * 1. A function like `defineRoute` and the first argument should be a function
-     * 2. A utils function signature like `RouteDefinition` and it should have two type arguments(Req, Resp).
+     * 2. A utils function, and it's signature should like `RouteDefinition` which should have two type arguments(Req, Resp).
      */
     const args = tc
       .getResolvedSignature(fnExpression)
