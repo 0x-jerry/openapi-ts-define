@@ -18,7 +18,7 @@ describe('test generate openapi schema', () => {
     })
 
     parser.parse({
-      routesRoot: path.resolve('example/routes'),
+      routesRoot: path.resolve('e2e/routes'),
       matchFiles: ['**/*.ts', '!**/_*.ts'],
     })
 

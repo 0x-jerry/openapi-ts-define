@@ -15,5 +15,5 @@
     "outDir": "dist",
     "types": ["vitest/globals"]
   },
-  "include": ["src", "test", "example"]
+  "include": ["src", "tests", "e2e"]
 }
