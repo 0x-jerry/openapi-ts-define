@@ -1,0 +1,50 @@
+{
+  "refs": Map {
+    "User" => {
+      "properties": {
+        "id": {
+          "type": "string",
+        },
+        "name": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "id",
+        "name",
+      ],
+      "type": "object",
+    },
+  },
+  "routes": [
+    {
+      "meta": {
+        "filepath": "index.ts",
+      },
+      "method": "get",
+      "path": "/",
+      "request": {
+        "body": undefined,
+        "params": [],
+        "query": [
+          {
+            "description": undefined,
+            "name": "id",
+            "optional": false,
+          },
+        ],
+      },
+      "response": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/User",
+          },
+        },
+        "required": [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+  ],
+}
