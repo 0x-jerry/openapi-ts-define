@@ -1,4 +1,4 @@
-import type { RequestParams } from '@/types'
+import type { RequestParams } from '../src'
 import type { Awaitable } from '@0x-jerry/utils'
 
 interface RouteDefinition<Req, Resp> {
