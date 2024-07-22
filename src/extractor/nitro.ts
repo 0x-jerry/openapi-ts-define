@@ -120,7 +120,10 @@ function getRouteDefineNode(exportSymbol: tsm.Symbol) {
   if (Node.isIdentifier(initializer)) {
     const node = initializer.getDefinitionNodes().at(0)
     if (Node.isVariableDeclaration(node)) {
-      return node.getInitializer()
+      const initializer = node.getInitializer()
+      if (Node.isCallExpression(initializer)) {
+        return initializer
+      }
     }
   }
 }

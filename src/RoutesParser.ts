@@ -1,4 +1,4 @@
-import tsm, { Project } from 'ts-morph'
+import tsm, { Node, Project } from 'ts-morph'
 import fg from 'fast-glob'
 import path from 'path'
 import type { RouteConfig, RouteRequestParam } from './types'
@@ -31,6 +31,7 @@ export class RoutesParser {
     this.schemaContext = {
       cwd,
       project: this.project,
+      checker: this.project.getTypeChecker(),
       refs: option.refsManager ?? new RefsManager(),
       nodeStack: [],
     }
@@ -73,7 +74,7 @@ export class RoutesParser {
         path: routeInfo.path,
         method: routeInfo.method,
         request: reqConfig,
-        response: this.typeToSchema(typeParams.response),
+        response: this.nodeToSchema(typeParams.response),
         meta: {
           filepath: relativeFilePath,
         },
@@ -88,8 +89,8 @@ export class RoutesParser {
   }
 
   getRequestParameters(typeNode: tsm.Type) {
-    const getNodeType = (query?: tsm.Symbol) =>
-      query?.getTypeAtLocation(typeNode.getSymbol()?.getDeclarations().at(0)!)
+    const currentNode = typeNode.getSymbol()?.getDeclarations().at(0)!
+    const getNodeType = (query?: tsm.Symbol) => query?.getTypeAtLocation(currentNode!)
 
     const query = typeNode.getProperty('query')
     const params = typeNode.getProperty('params')
@@ -102,16 +103,22 @@ export class RoutesParser {
     return {
       query: queryNames,
       params: paramsNames,
-      body: this.typeToSchema(getNodeType(body)),
+      body: this.nodeToSchema(body),
     }
   }
 
-  typeToSchema(typeNode?: tsm.Type) {
-    const node = typeNode?.getSymbol()?.getDeclarations().at(0)
+  nodeToSchema(typeNode?: tsm.Node | tsm.Type | tsm.Symbol) {
+    if (!typeNode) return
 
-    if (!node) return
+    const _node = Node.isNode(typeNode)
+      ? typeNode
+      : typeNode instanceof tsm.Symbol
+      ? typeNode.getDeclarations().at(0)
+      : typeNode.getSymbol()?.getDeclarations().at(0)
 
-    return toSchema(node, this.schemaContext)
+    if (!_node) return
+
+    return toSchema(_node, this.schemaContext)
   }
 
   getRouteTypes(fnExpression: tsm.CallExpression) {
@@ -134,17 +141,15 @@ export class RoutesParser {
      * 1. A function like `defineRoute` and the first argument should be a function
      * 2. A utils function, and it's signature should like `RouteDefinition` which should have two type arguments(Req, Resp).
      */
-    const args = tc
-      .getResolvedSignature(fnExpression)
-      ?.getParameters()
-      .at(0)
-      ?.getTypeAtLocation(fnExpression)
-      .getTypeArguments()
+    const fnType = tc.getResolvedSignature(fnExpression)
+
+    const args = fnType?.getParameters().at(0)?.getTypeAtLocation(fnExpression).getTypeArguments()
 
     const reqArg = args?.at(0)
     const respArg = args?.at(1)
 
     return {
+      node: fnExpression,
       request: reqArg,
       response: respArg,
     }

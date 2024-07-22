@@ -1,9 +1,10 @@
 import type { JSONSchema7 } from 'json-schema'
-import type { Node, Project } from 'ts-morph'
+import type { Node, Project, TypeChecker } from 'ts-morph'
 
 export interface ToSchemaContext {
   cwd: string
   project: Project
+  checker: TypeChecker
   refs: ReferenceManager
   nodeStack: Node[]
 }
