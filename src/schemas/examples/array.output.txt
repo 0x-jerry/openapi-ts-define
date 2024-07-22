@@ -1,0 +1,45 @@
+{
+  "refs": Map {},
+  "schemas": [
+    {
+      "items": {
+        "type": "number",
+      },
+      "type": "array",
+    },
+    {
+      "items": {
+        "type": "string",
+      },
+      "type": "array",
+    },
+    {
+      "oneOf": [
+        {
+          "enum": [
+            false,
+          ],
+          "type": "boolean",
+        },
+        {
+          "enum": [
+            true,
+          ],
+          "type": "boolean",
+        },
+        {
+          "items": {
+            "type": "string",
+          },
+          "type": "array",
+        },
+        {
+          "items": {
+            "type": "number",
+          },
+          "type": "array",
+        },
+      ],
+    },
+  ],
+}

@@ -1,5 +1,5 @@
 import type { JSONSchema7 } from 'json-schema'
-import tsm, { ts } from 'ts-morph'
+import tsm from 'ts-morph'
 import type { ToSchemaContext } from './types'
 
 import { toObjectSchema } from './object'
@@ -9,6 +9,7 @@ import { toBooleanSchema } from './boolean'
 import { toUnionSchema } from './union'
 import { toRefSchema } from './ref'
 import { toEnumSchema } from '.'
+import { toArraySchema } from './array'
 
 export interface ToSchemaOption {
   skipRefCheck?: boolean
@@ -34,7 +35,9 @@ export function toSchema(
 }
 
 function _toSchema(type: tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption): JSONSchema7 {
-  if (type.isEnum()) {
+  if (type.isArray()) {
+    return toArraySchema(type, ctx)
+  } else if (type.isEnum()) {
     if (option?.skipRefCheck) {
       return toEnumSchema(type)
     }
