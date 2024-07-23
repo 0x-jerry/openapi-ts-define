@@ -6,7 +6,9 @@ import path from 'path'
 
 /**
  *
- * @param type maybe interface declaration, type literal, enum declaration
+ * Check if `type` can be convert to a reference schema
+ *
+ * @param type
  * @param ctx
  * @returns
  */
