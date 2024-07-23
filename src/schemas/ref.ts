@@ -15,8 +15,11 @@ export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
     $ref: '',
   }
 
-  const sy = type.getAliasSymbol() || type.getSymbol()
-  const node = sy?.getDeclarations().at(0)
+  const node = (type.getAliasSymbol() || type.getSymbol())?.getDeclarations().at(0)
+
+  if (!node) {
+    return _getSchema()
+  }
 
   const supportedType =
     Node.isEnumDeclaration(node) ||
@@ -25,28 +28,32 @@ export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
     Node.isTypeAliasDeclaration(node)
 
   if (!supportedType) {
-    return toSchema(type, ctx, { skipRefCheck: true })
+    return _getSchema()
   }
 
-  const name = getNodeName(node)
+  const typeName = getNodeName(node)
 
-  if (!name) {
-    return toSchema(type, ctx, { skipRefCheck: true })
+  if (!typeName) {
+    return _getSchema()
   }
 
   const sf = node.getSourceFile()
 
   const relativePath = path.relative(ctx.cwd, sf.getFilePath()).replaceAll(path.sep, '/')
-  const refKey = ctx.refs.getRefKey(relativePath, name)
+  const refKey = ctx.refs.getRefKey(relativePath, typeName)
 
   schema.$ref = refKey
 
-  if (!ctx.refs.has(relativePath, name)) {
-    const schema = toSchema(node, ctx, { skipRefCheck: true })
-    ctx.refs.set(relativePath, name, schema)
+  if (!ctx.refs.has(relativePath, typeName)) {
+    const schema = _getSchema()
+    ctx.refs.set(relativePath, typeName, schema)
   }
 
   return schema
+
+  function _getSchema() {
+    return toSchema(type, ctx, { skipRefCheck: true })
+  }
 }
 
 function getNodeName(
@@ -56,6 +63,7 @@ function getNodeName(
     | tsm.EnumDeclaration
     | tsm.TypeAliasDeclaration
 ) {
+  // todo, get correct name
   if (Node.isTypeLiteral(node)) {
     const parentNode = node.getParent()
     if (Node.isTypeAliasDeclaration(parentNode)) {

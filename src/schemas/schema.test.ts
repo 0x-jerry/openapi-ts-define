@@ -22,7 +22,6 @@ describe('object schema', () => {
         cwd,
         project,
         refs: new RefsManager(),
-        nodeStack: [],
       }
 
       const absFile = path.join(cwd, file)
@@ -40,7 +39,7 @@ describe('object schema', () => {
 
       const outputFile = path.join(cwd, file.replace('.ts', '.output.txt'))
 
-      const schemas = types.map((n) => toSchema(n, ctx))
+      const schemas = types.map((n) => toSchema(n.getType(), ctx))
 
       const output = {
         schemas,

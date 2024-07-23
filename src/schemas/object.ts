@@ -18,10 +18,12 @@ export function toObjectSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema
 
   const requiredProps: string[] = []
 
+  const currentNode = type.getSymbol()?.getDeclarations().at(0)
+
   for (const prop of props) {
     const propName = prop.getName()
 
-    const result = generatePropSchema(prop, ctx)
+    const result = generatePropSchema(prop, currentNode!, ctx)
     if (!result) continue
 
     propertiesSchema[propName] = result.schema
@@ -41,12 +43,12 @@ export function toObjectSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema
 
 function generatePropSchema(
   prop: tsm.Symbol,
+  node: tsm.Node,
   ctx: ToSchemaContext
 ): { schema: JSONSchema7; required: boolean } | false {
-  const currentNode = ctx.nodeStack.at(-1)!
   const isOptional = prop.isOptional()
 
-  let propType = prop.getTypeAtLocation(currentNode)
+  let propType = prop.getTypeAtLocation(node)
 
   // unwrap optional type
   if (propType.isUnion() && isOptional) {

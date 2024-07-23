@@ -4,9 +4,7 @@ import type { Node, Project, TypeChecker } from 'ts-morph'
 export interface ToSchemaContext {
   cwd: string
   project: Project
-  checker: TypeChecker
   refs: ReferenceManager
-  nodeStack: Node[]
 }
 
 export interface ReferenceManager<T = JSONSchema7> {

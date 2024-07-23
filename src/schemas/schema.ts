@@ -1,5 +1,5 @@
 import type { JSONSchema7 } from 'json-schema'
-import tsm, { Node } from 'ts-morph'
+import tsm from 'ts-morph'
 import type { ToSchemaContext } from './types'
 
 import { toObjectSchema } from './object'
@@ -16,39 +16,28 @@ export interface ToSchemaOption {
 }
 
 export function toSchema(
-  node: tsm.Node | tsm.Type,
+  typeNode: tsm.Type,
   ctx: ToSchemaContext,
   option?: ToSchemaOption
 ): JSONSchema7 {
-  if (tsm.Node.isNode(node)) {
-    ctx.nodeStack.push(node)
-
-    const type = node.getType()
-    const schema = _toSchema(type, ctx, option)
-
-    ctx.nodeStack.pop()
-
-    return schema
-  }
-
-  return _toSchema(node, ctx, option)
+  return _toSchema(typeNode, ctx, option)
 }
 
 function _toSchema(type: tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption): JSONSchema7 {
   if (type.isArray()) {
     return toArraySchema(type, ctx)
   } else if (type.isEnum()) {
-    if (option?.skipRefCheck) {
-      return toEnumSchema(type)
+    if (!option?.skipRefCheck) {
+      return toRefSchema(type, ctx)
     }
 
-    return toRefSchema(type, ctx)
+    return toEnumSchema(type)
   } else if (type.isBoolean() || type.isBooleanLiteral()) {
     return toBooleanSchema(type)
   } else if (type.isUnion()) {
     return toUnionSchema(type, ctx)
   } else if (type.isObject()) {
-    if (!option?.skipRefCheck && isRefType(type, ctx)) {
+    if (!option?.skipRefCheck) {
       return toRefSchema(type, ctx)
     }
 
@@ -61,21 +50,4 @@ function _toSchema(type: tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption
 
   const schema: JSONSchema7 = {}
   return schema
-}
-
-function isRefType(type: tsm.Type, ctx: ToSchemaContext) {
-  const node = (type.getAliasSymbol() || type.getSymbol())?.getDeclarations().at(0)
-  if (Node.isInterfaceDeclaration(node)) {
-    return node.getType().getTypeArguments().length === 0
-  }
-
-  if (Node.isTypeReference(node)) {
-    return node.getType().getTypeArguments().length === 0
-  }
-
-  if (Node.isTypeAliasDeclaration(node)) {
-    return node.getType().getTypeArguments().length === 0
-  }
-
-  return false
 }
