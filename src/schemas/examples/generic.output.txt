@@ -1,6 +1,6 @@
 {
   "refs": Map {
-    "(generic.ts).G" => {
+    "(generic.ts).G_T" => {
       "properties": {
         "a": {
           "type": "number",
@@ -28,13 +28,42 @@
       ],
       "type": "object",
     },
+    "(generic.ts).G_string" => {
+      "properties": {
+        "a": {
+          "type": "number",
+        },
+        "t": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "a",
+        "t",
+      ],
+      "type": "object",
+    },
+    "(generic.ts).AG" => {
+      "properties": {
+        "g": {
+          "$ref": "(generic.ts).G_string",
+        },
+      },
+      "required": [
+        "g",
+      ],
+      "type": "object",
+    },
   },
   "schemas": [
     {
-      "$ref": "(generic.ts).G",
+      "$ref": "(generic.ts).G_T",
     },
     {
       "$ref": "(generic.ts).A",
+    },
+    {
+      "$ref": "(generic.ts).AG",
     },
   ],
 }

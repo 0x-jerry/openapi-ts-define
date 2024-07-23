@@ -1,0 +1,42 @@
+{
+  "info": {
+    "version": "1.0.0",
+    "title": "test spec"
+  },
+  "openapi": "3.0.0",
+  "components": {
+    "schemas": {
+      "G_string": {
+        "type": "object",
+        "required": [
+          "t"
+        ],
+        "properties": {
+          "t": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/G_string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

@@ -4,3 +4,7 @@ type G<T = boolean> = {
 }
 
 export type A = G<string>
+
+export interface AG {
+  g: G<string>
+}

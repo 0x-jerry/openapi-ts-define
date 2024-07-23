@@ -64,7 +64,6 @@ function getNodeName(
     | tsm.EnumDeclaration
     | tsm.TypeAliasDeclaration
 ) {
-  // todo, get correct name
   if (Node.isTypeLiteral(node)) {
     const parentNode = node.getParent()
     if (Node.isTypeAliasDeclaration(parentNode)) {
@@ -75,6 +74,10 @@ function getNodeName(
     return false
   }
 
+  const aliasTypeNames = type.getAliasTypeArguments().map((n) => {
+    return n.getText()
+  })
+
   if (type.isArray()) {
     // hack, skip raw Array<T> type
     if (node.getSourceFile().getFilePath().includes('node_modules')) {
@@ -82,5 +85,5 @@ function getNodeName(
     }
   }
 
-  return node.getName()
+  return [node.getName(), ...aliasTypeNames].filter(Boolean).join('_')
 }

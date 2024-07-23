@@ -1,0 +1,32 @@
+{
+  "refs": Map {
+    "G_string" => {
+      "properties": {
+        "t": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "t",
+      ],
+      "type": "object",
+    },
+  },
+  "routes": [
+    {
+      "meta": {
+        "filepath": "index.ts",
+      },
+      "method": "get",
+      "path": "/",
+      "request": {
+        "body": undefined,
+        "params": [],
+        "query": [],
+      },
+      "response": {
+        "$ref": "#/components/schemas/G_string",
+      },
+    },
+  ],
+}
