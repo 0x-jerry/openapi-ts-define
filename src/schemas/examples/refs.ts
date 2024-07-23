@@ -16,3 +16,11 @@ interface B {
  * type ref
  */
 type C = B | string
+
+type D = {
+  c: C
+  b: B
+  a: {
+    a: number
+  }
+}

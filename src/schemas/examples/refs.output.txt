@@ -100,6 +100,33 @@
         },
       ],
     },
+    "(refs.ts).D" => {
+      "properties": {
+        "a": {
+          "properties": {
+            "a": {
+              "type": "number",
+            },
+          },
+          "required": [
+            "a",
+          ],
+          "type": "object",
+        },
+        "b": {
+          "$ref": "(refs.ts).B",
+        },
+        "c": {
+          "$ref": "(refs.ts).C",
+        },
+      },
+      "required": [
+        "c",
+        "b",
+        "a",
+      ],
+      "type": "object",
+    },
   },
   "schemas": [
     {
@@ -107,6 +134,9 @@
     },
     {
       "$ref": "(refs.ts).C",
+    },
+    {
+      "$ref": "(refs.ts).D",
     },
   ],
 }
