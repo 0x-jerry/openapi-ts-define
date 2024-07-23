@@ -31,9 +31,7 @@ export class RoutesParser {
     this.schemaContext = {
       cwd,
       project: this.project,
-      checker: this.project.getTypeChecker(),
       refs: option.refsManager ?? new RefsManager(),
-      nodeStack: [],
     }
   }
 
@@ -110,15 +108,15 @@ export class RoutesParser {
   nodeToSchema(typeNode?: tsm.Node | tsm.Type | tsm.Symbol) {
     if (!typeNode) return
 
-    const _node = Node.isNode(typeNode)
-      ? typeNode
+    const _nodeType = Node.isNode(typeNode)
+      ? typeNode.getType()
       : typeNode instanceof tsm.Symbol
-      ? typeNode.getDeclarations().at(0)
-      : typeNode.getSymbol()?.getDeclarations().at(0)
+      ? typeNode.getTypeAtLocation(typeNode.getDeclarations().at(0)!)
+      : typeNode
 
-    if (!_node) return
+    if (!_nodeType) return
 
-    return toSchema(_node, this.schemaContext)
+    return toSchema(_nodeType, this.schemaContext)
   }
 
   getRouteTypes(fnExpression: tsm.CallExpression) {
