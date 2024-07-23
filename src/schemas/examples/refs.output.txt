@@ -64,28 +64,6 @@
     "(refs.ts).B" => {
       "description": "interface ref",
       "properties": {
-        "A": {
-          "oneOf": [
-            {
-              "type": "string",
-            },
-            {
-              "type": "number",
-            },
-            {
-              "enum": [
-                false,
-              ],
-              "type": "boolean",
-            },
-            {
-              "enum": [
-                true,
-              ],
-              "type": "boolean",
-            },
-          ],
-        },
         "B": {
           "type": "number",
         },
@@ -106,11 +84,21 @@
         },
       },
       "required": [
-        "A",
         "B",
         "O",
       ],
       "type": "object",
+    },
+    "(refs.ts).C" => {
+      "description": "type ref",
+      "oneOf": [
+        {
+          "type": "string",
+        },
+        {
+          "$ref": "(refs.ts).B",
+        },
+      ],
     },
   },
   "schemas": [
@@ -118,30 +106,7 @@
       "$ref": "(refs.ts).B",
     },
     {
-      "description": "type ref",
-      "oneOf": [
-        {
-          "type": "string",
-        },
-        {
-          "type": "number",
-        },
-        {
-          "enum": [
-            false,
-          ],
-          "type": "boolean",
-        },
-        {
-          "enum": [
-            true,
-          ],
-          "type": "boolean",
-        },
-        {
-          "$ref": "(refs.ts).B",
-        },
-      ],
+      "$ref": "(refs.ts).C",
     },
   ],
 }

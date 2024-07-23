@@ -31,7 +31,7 @@ export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
     return _getSchema()
   }
 
-  const typeName = getNodeName(node)
+  const typeName = getNodeName(type, node)
 
   if (!typeName) {
     return _getSchema()
@@ -57,6 +57,7 @@ export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
 }
 
 function getNodeName(
+  type: tsm.Type,
   node:
     | tsm.InterfaceDeclaration
     | tsm.TypeLiteralNode
@@ -72,6 +73,13 @@ function getNodeName(
       return name
     }
     return false
+  }
+
+  if (type.isArray()) {
+    // hack, skip raw Array<T> type
+    if (node.getSourceFile().getFilePath().includes('node_modules')) {
+      return
+    }
   }
 
   return node.getName()

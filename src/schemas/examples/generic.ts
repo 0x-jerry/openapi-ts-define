@@ -1,4 +1,4 @@
-type G<T> = {
+type G<T = boolean> = {
   a: number
   t: T
 }

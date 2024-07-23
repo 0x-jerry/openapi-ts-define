@@ -1,7 +1,6 @@
 {
-  "refs": Map {},
-  "schemas": [
-    {
+  "refs": Map {
+    "(union.ts).A" => {
       "oneOf": [
         {
           "type": "string",
@@ -23,7 +22,7 @@
         },
       ],
     },
-    {
+    "(union.ts).B" => {
       "description": "docs",
       "oneOf": [
         {
@@ -58,7 +57,7 @@
         },
       ],
     },
-    {
+    "(union.ts).C" => {
       "oneOf": [
         {
           "type": "string",
@@ -92,6 +91,17 @@
           "type": "object",
         },
       ],
+    },
+  },
+  "schemas": [
+    {
+      "$ref": "(union.ts).A",
+    },
+    {
+      "$ref": "(union.ts).B",
+    },
+    {
+      "$ref": "(union.ts).C",
     },
   ],
 }

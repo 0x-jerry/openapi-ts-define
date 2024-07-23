@@ -20,27 +20,23 @@ export function toSchema(
   ctx: ToSchemaContext,
   option?: ToSchemaOption
 ): JSONSchema7 {
-  return _toSchema(typeNode, ctx, option)
+  if (!option?.skipRefCheck) {
+    return toRefSchema(typeNode, ctx)
+  }
+
+  return _toSchema(typeNode, ctx)
 }
 
-function _toSchema(type: tsm.Type, ctx: ToSchemaContext, option?: ToSchemaOption): JSONSchema7 {
+function _toSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   if (type.isArray()) {
     return toArraySchema(type, ctx)
   } else if (type.isEnum()) {
-    if (!option?.skipRefCheck) {
-      return toRefSchema(type, ctx)
-    }
-
     return toEnumSchema(type)
   } else if (type.isBoolean() || type.isBooleanLiteral()) {
     return toBooleanSchema(type)
   } else if (type.isUnion()) {
     return toUnionSchema(type, ctx)
   } else if (type.isObject()) {
-    if (!option?.skipRefCheck) {
-      return toRefSchema(type, ctx)
-    }
-
     return toObjectSchema(type, ctx)
   } else if (type.isString() || type.isStringLiteral()) {
     return toStringSchema(type)

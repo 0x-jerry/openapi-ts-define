@@ -1,14 +1,12 @@
 import path from 'path'
 import { Node, Project } from 'ts-morph'
-import { fileURLToPath } from 'url'
 import fg from 'fast-glob'
 import { toSchema } from './schema'
 import type { ToSchemaContext } from './types'
 import { RefsManager } from './utils'
 
 describe('object schema', () => {
-  const __dirname = path.dirname(fileURLToPath(import.meta.url))
-  const cwd = path.join(__dirname, 'examples')
+  const cwd = path.join(import.meta.dirname, 'examples')
 
   const project = new Project({
     tsConfigFilePath: path.join(cwd, 'tsconfig.json'),

@@ -1,4 +1,3 @@
-import { A } from './union'
 import { Values } from './enum'
 import { LiteralObjectType, ObjectType } from './object'
 
@@ -6,7 +5,6 @@ import { LiteralObjectType, ObjectType } from './object'
  * interface ref
  */
 interface B {
-  A: A
   B: number
   E?: Values
   O: ObjectType
@@ -17,4 +15,4 @@ interface B {
 /**
  * type ref
  */
-type C = B | A | string
+type C = B | string

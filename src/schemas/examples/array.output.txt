@@ -1,19 +1,18 @@
 {
-  "refs": Map {},
-  "schemas": [
-    {
+  "refs": Map {
+    "(array.ts).A" => {
       "items": {
         "type": "number",
       },
       "type": "array",
     },
-    {
+    "(array.ts).B" => {
       "items": {
         "type": "string",
       },
       "type": "array",
     },
-    {
+    "(array.ts).C" => {
       "oneOf": [
         {
           "enum": [
@@ -40,6 +39,17 @@
           "type": "array",
         },
       ],
+    },
+  },
+  "schemas": [
+    {
+      "$ref": "(array.ts).A",
+    },
+    {
+      "$ref": "(array.ts).B",
+    },
+    {
+      "$ref": "(array.ts).C",
     },
   ],
 }
