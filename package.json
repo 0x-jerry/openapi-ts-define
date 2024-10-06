@@ -40,7 +40,7 @@
   "dependencies": {
     "@0x-jerry/utils": "^3.0.0",
     "fast-glob": "^3.3.2",
-    "ts-morph": "^23.0.0"
+    "ts-morph": "^24.0.0"
   },
   "stackblitz": {
     "startCommand": "npm run test:watch"
