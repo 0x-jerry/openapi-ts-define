@@ -1,8 +1,8 @@
 import type { JSONSchema7 } from 'json-schema'
-import tsm from 'ts-morph'
+import type tsm from 'ts-morph'
 import { toSchema } from './schema'
-import { getDocument } from './utils'
 import type { ToSchemaContext } from './types'
+import { getDocument } from './utils'
 
 export function toObjectSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   const schema: JSONSchema7 = {
@@ -44,7 +44,7 @@ export function toObjectSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema
 function generatePropSchema(
   prop: tsm.Symbol,
   node: tsm.Node,
-  ctx: ToSchemaContext
+  ctx: ToSchemaContext,
 ): { schema: JSONSchema7; required: boolean } | false {
   const isOptional = prop.isOptional()
 

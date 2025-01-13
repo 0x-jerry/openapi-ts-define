@@ -1,13 +1,13 @@
-import { SimpleRefsManager } from '../schemas/utils'
-import type { RouteRequestParam } from '..'
-import type { SchemaGenerator, SchemaGeneratorContext } from './types'
 import type {
   OpenAPI3,
-  PathItemObject,
-  ParameterObject,
   OperationObject,
+  ParameterObject,
+  PathItemObject,
   SchemaObject,
 } from 'openapi-typescript'
+import type { RouteRequestParam } from '..'
+import { SimpleRefsManager } from '../schemas/utils'
+import type { SchemaGenerator, SchemaGeneratorContext } from './types'
 
 type PartialOpenAPIConfig = Omit<OpenAPI3, 'paths' | 'tags' | 'openapi'>
 

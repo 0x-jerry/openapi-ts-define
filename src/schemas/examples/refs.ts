@@ -1,5 +1,5 @@
-import { Values } from './enum'
-import { LiteralObjectType, ObjectType } from './object'
+import type { Values } from './enum'
+import type { LiteralObjectType, ObjectType } from './object'
 
 /**
  * interface ref

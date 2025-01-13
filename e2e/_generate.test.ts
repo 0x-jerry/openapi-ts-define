@@ -1,5 +1,5 @@
+import path from 'node:path'
 import { OpenAPIGenerator, RoutesParser } from '../src'
-import path from 'path'
 
 describe('test generate openapi schema', () => {
   it('should generate oepnapi schema file', async () => {

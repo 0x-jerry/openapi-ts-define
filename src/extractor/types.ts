@@ -1,5 +1,5 @@
-import type tsm from 'ts-morph'
 import type { Arrayable } from '@0x-jerry/utils'
+import type tsm from 'ts-morph'
 
 export interface RouteInfoExtractorContext {
   path: string
@@ -13,6 +13,7 @@ export interface RouteInfo {
   routeDefineAST: tsm.CallExpression
 }
 
-export interface RouteInfoExtractor {
-  (source: tsm.SourceFile, ctx: RouteInfoExtractorContext): Arrayable<RouteInfo> | undefined
-}
+export type RouteInfoExtractor = (
+  source: tsm.SourceFile,
+  ctx: RouteInfoExtractorContext,
+) => Arrayable<RouteInfo> | undefined

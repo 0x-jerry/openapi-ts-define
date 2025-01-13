@@ -22,9 +22,7 @@
     }
   },
   "files": {
-    "ignore": [
-      "*.json"
-    ]
+    "include": ["src", "tests/**/*.test.ts", "e2e/**/*.test.ts"]
   },
   "javascript": {
     "formatter": {

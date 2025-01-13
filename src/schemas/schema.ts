@@ -1,15 +1,15 @@
 import type { JSONSchema7 } from 'json-schema'
-import tsm from 'ts-morph'
+import type tsm from 'ts-morph'
 import type { ToSchemaContext } from './types'
 
-import { toObjectSchema } from './object'
-import { toStringSchema } from './string'
-import { toNumberSchema } from './number'
-import { toBooleanSchema } from './boolean'
-import { toUnionSchema } from './union'
-import { toRefSchema } from './ref'
 import { toEnumSchema } from '.'
 import { toArraySchema } from './array'
+import { toBooleanSchema } from './boolean'
+import { toNumberSchema } from './number'
+import { toObjectSchema } from './object'
+import { toRefSchema } from './ref'
+import { toStringSchema } from './string'
+import { toUnionSchema } from './union'
 
 export interface ToSchemaOption {
   skipRefCheck?: boolean
@@ -18,7 +18,7 @@ export interface ToSchemaOption {
 export function toSchema(
   typeNode: tsm.Type,
   ctx: ToSchemaContext,
-  option?: ToSchemaOption
+  option?: ToSchemaOption,
 ): JSONSchema7 {
   if (!option?.skipRefCheck) {
     return toRefSchema(typeNode, ctx)
@@ -30,17 +30,23 @@ export function toSchema(
 function _toSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   if (type.isArray()) {
     return toArraySchema(type, ctx)
-  } else if (type.isEnum()) {
+  }
+  if (type.isEnum()) {
     return toEnumSchema(type)
-  } else if (type.isBoolean() || type.isBooleanLiteral()) {
+  }
+  if (type.isBoolean() || type.isBooleanLiteral()) {
     return toBooleanSchema(type)
-  } else if (type.isUnion()) {
+  }
+  if (type.isUnion()) {
     return toUnionSchema(type, ctx)
-  } else if (type.isObject()) {
+  }
+  if (type.isObject()) {
     return toObjectSchema(type, ctx)
-  } else if (type.isString() || type.isStringLiteral()) {
+  }
+  if (type.isString() || type.isStringLiteral()) {
     return toStringSchema(type)
-  } else if (type.isNumber() || type.isNumberLiteral()) {
+  }
+  if (type.isNumber() || type.isNumberLiteral()) {
     return toNumberSchema(type)
   }
 

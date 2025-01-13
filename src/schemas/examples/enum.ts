@@ -2,8 +2,8 @@
  * Switch Value
  */
 export enum Values {
-  On,
-  Off,
+  On = 0,
+  Off = 1,
 }
 
 enum StingEnum {
@@ -14,9 +14,9 @@ enum StingEnum {
 
 enum NumEnum {
   A = 1,
-  B,
+  B = 2,
   C = 5,
-  D,
+  D = 6,
 }
 
 enum MixEnum {
@@ -27,7 +27,7 @@ enum MixEnum {
   /**
    * should be 3
    */
-  E,
+  E = 3,
   F = 'c',
   G = 'd',
 }

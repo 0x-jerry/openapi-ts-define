@@ -1,6 +1,6 @@
+import type { JSONSchema7 } from 'json-schema'
 import tsm from 'ts-morph'
 import type { ReferenceManager } from './types'
-import type { JSONSchema7 } from 'json-schema'
 
 export function getDocument(type: tsm.Type | tsm.Symbol) {
   if (type instanceof tsm.Symbol) {

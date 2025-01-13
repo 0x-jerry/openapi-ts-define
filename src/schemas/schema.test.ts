@@ -1,6 +1,6 @@
-import path from 'path'
-import { Node, Project } from 'ts-morph'
+import path from 'node:path'
 import fg from 'fast-glob'
+import { Node, Project } from 'ts-morph'
 import { toSchema } from './schema'
 import type { ToSchemaContext } from './types'
 import { RefsManager } from './utils'
@@ -32,7 +32,7 @@ describe('object schema', () => {
           (node) =>
             Node.isInterfaceDeclaration(node) ||
             Node.isTypeAliasDeclaration(node) ||
-            Node.isEnumDeclaration(node)
+            Node.isEnumDeclaration(node),
         )
 
       const outputFile = path.join(cwd, file.replace('.ts', '.output.txt'))

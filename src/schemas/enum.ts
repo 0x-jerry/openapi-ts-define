@@ -1,5 +1,5 @@
 import type { JSONSchema7 } from 'json-schema'
-import tsm from 'ts-morph'
+import type tsm from 'ts-morph'
 import { getDocument } from './utils'
 
 type EnumValue = string | number | boolean | null

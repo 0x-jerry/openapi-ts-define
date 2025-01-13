@@ -1,4 +1,4 @@
-import { _convertToUrlPath } from "./nitro"
+import { _convertToUrlPath } from './nitro'
 
 describe('netro extractor', () => {
   it('convert to url path', () => {
@@ -8,64 +8,71 @@ describe('netro extractor', () => {
         expected: {
           path: '/api',
           method: 'get',
-          params: []
-        }
+          params: [],
+        },
       },
       {
         path: 'api/hello.ts',
         expected: {
           path: '/api/hello',
           method: 'get',
-          params: []
-        }
+          params: [],
+        },
       },
       {
         path: 'api/hello.get.ts',
         expected: {
           path: '/api/hello',
           method: 'get',
-          params: []
-        }
+          params: [],
+        },
       },
       {
         path: 'api/hello.post.ts',
         expected: {
           path: '/api/hello',
           method: 'post',
-          params: []
-        }
+          params: [],
+        },
       },
       {
         path: 'api/user/[id].get.ts',
         expected: {
           path: '/api/user/{id}',
           method: 'get',
-          params: [{
-            name: 'id'
-          }]
-        }
+          params: [
+            {
+              name: 'id',
+            },
+          ],
+        },
       },
       {
         path: 'api/user/[id].post.ts',
         expected: {
           path: '/api/user/{id}',
           method: 'post',
-          params: [{
-            name: 'id'
-          }]
-        }
+          params: [
+            {
+              name: 'id',
+            },
+          ],
+        },
       },
       {
         path: 'api/user/[id]/[name].put.ts',
         expected: {
           path: '/api/user/{id}/{name}',
           method: 'put',
-          params: [{
-            name: 'id'
-          }, {
-            name: 'name'
-          }]
-        }
+          params: [
+            {
+              name: 'id',
+            },
+            {
+              name: 'name',
+            },
+          ],
+        },
       },
     ]
 
@@ -74,5 +81,4 @@ describe('netro extractor', () => {
       expect(resp).eqls(t.expected)
     }
   })
-
 })

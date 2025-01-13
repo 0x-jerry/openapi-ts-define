@@ -1,13 +1,13 @@
-import tsm, { Node, Project } from 'ts-morph'
-import fg from 'fast-glob'
-import path from 'path'
-import type { RouteConfig, RouteRequestParam } from './types'
-import type { ReferenceManager, ToSchemaContext } from './schemas/types'
-import { toSchema } from './schemas/schema'
-import type { RouteInfoExtractor } from './extractor/types'
-import nitroExtractor from './extractor/nitro'
-import { RefsManager, getDocument } from './schemas/utils'
+import path from 'node:path'
 import { ensureArray } from '@0x-jerry/utils'
+import fg from 'fast-glob'
+import tsm, { Node, type Project } from 'ts-morph'
+import nitroExtractor from './extractor/nitro'
+import type { RouteInfoExtractor } from './extractor/types'
+import { toSchema } from './schemas/schema'
+import type { ReferenceManager, ToSchemaContext } from './schemas/types'
+import { RefsManager, getDocument } from './schemas/utils'
+import type { RouteConfig, RouteRequestParam } from './types'
 
 export interface RouteParserOption {
   tsconfig: string
@@ -111,8 +111,8 @@ export class RoutesParser {
     const _nodeType = Node.isNode(typeNode)
       ? typeNode.getType()
       : typeNode instanceof tsm.Symbol
-      ? typeNode.getTypeAtLocation(typeNode.getDeclarations().at(0)!)
-      : typeNode
+        ? typeNode.getTypeAtLocation(typeNode.getDeclarations().at(0)!)
+        : typeNode
 
     if (!_nodeType) return
 

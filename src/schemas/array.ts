@@ -1,8 +1,8 @@
 import type { JSONSchema7 } from 'json-schema'
-import tsm from 'ts-morph'
-import { getDocument } from './utils'
+import type tsm from 'ts-morph'
 import { toSchema } from './schema'
 import type { ToSchemaContext } from './types'
+import { getDocument } from './utils'
 
 export function toArraySchema(node: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   const schema: JSONSchema7 = {

@@ -1,8 +1,9 @@
-import path from 'path'
-import type { RouteRequestParam } from '../types'
-import type { RouteInfoExtractor, RouteInfo } from './types'
-import tsm, { Node } from 'ts-morph'
+import path from 'node:path'
+import type tsm from 'ts-morph'
+import { Node } from 'ts-morph'
 import { getDocument } from '../schemas/utils'
+import type { RouteRequestParam } from '../types'
+import type { RouteInfo, RouteInfoExtractor } from './types'
 
 const methodRE = /\.(?<method>get|post|put|delete|patch)$/i
 
@@ -49,16 +50,15 @@ export function _convertToUrlPath(relativeFilePath: string) {
       })
 
       return `{${name}}`
-    } else {
-      return part
     }
+    return part
   })
 
   if (urlSegments.at(-1) === 'index') {
     urlSegments.splice(urlSegments.length - 1, 1)
   }
 
-  const urlPath = '/' + urlSegments.join('/')
+  const urlPath = `/${urlSegments.join('/')}`
 
   return {
     path: urlPath,

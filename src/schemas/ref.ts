@@ -1,8 +1,9 @@
+import path from 'node:path'
 import type { JSONSchema7 } from 'json-schema'
-import tsm, { Node } from 'ts-morph'
-import type { ToSchemaContext } from './types'
+import type tsm from 'ts-morph'
+import { Node } from 'ts-morph'
 import { toSchema } from './schema'
-import path from 'path'
+import type { ToSchemaContext } from './types'
 
 /**
  *
@@ -64,7 +65,7 @@ function getNodeName(
     | tsm.InterfaceDeclaration
     | tsm.TypeLiteralNode
     | tsm.EnumDeclaration
-    | tsm.TypeAliasDeclaration
+    | tsm.TypeAliasDeclaration,
 ) {
   if (Node.isTypeLiteral(node)) {
     const parentNode = node.getParent()

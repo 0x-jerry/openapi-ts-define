@@ -1,6 +1,6 @@
-import path from "path"
-import { OpenAPIGenerator } from "."
-import { RoutesParser } from "./RoutesParser"
+import path from 'node:path'
+import { OpenAPIGenerator } from '.'
+import { RoutesParser } from './RoutesParser'
 
 const generator = OpenAPIGenerator({
   openAPI: {
@@ -17,7 +17,7 @@ const parser = new RoutesParser({
 })
 
 parser.parse({
-  routesRoot: path.resolve(`tests/features/infer-type`),
+  routesRoot: path.resolve('tests/features/infer-type'),
   matchFiles: ['**/*.ts', '!**/_*.ts'],
 })
 

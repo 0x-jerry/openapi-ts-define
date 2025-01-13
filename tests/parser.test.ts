@@ -1,6 +1,6 @@
+import { readdir } from 'node:fs/promises'
+import path from 'node:path'
 import { OpenAPIGenerator, RoutesParser } from '../src'
-import path from 'path'
-import { readdir } from 'fs/promises'
 
 describe('parse typescript definition', async () => {
   const featureDirs = await readdir('tests/features')
@@ -35,8 +35,9 @@ describe('parse typescript definition', async () => {
 
       const schema = generator.generate(output.routes, output.refs)
 
-      await expect(JSON.stringify(schema, null, 2)).toMatchFileSnapshot(`out/${featureDir}/schema.json`)
+      await expect(JSON.stringify(schema, null, 2)).toMatchFileSnapshot(
+        `out/${featureDir}/schema.json`,
+      )
     })
   }
-
 })
