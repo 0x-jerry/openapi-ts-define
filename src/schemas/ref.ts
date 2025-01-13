@@ -40,9 +40,13 @@ export function toRefSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
     return _getSchema()
   }
 
-  const sf = node.getSourceFile()
+  const sf = node.getSourceFile().getFilePath()
 
-  const relativePath = path.relative(ctx.cwd, sf.getFilePath()).replaceAll(path.sep, '/')
+  const isLib = sf.startsWith('/node_modules/')
+  let relativePath = isLib ? sf : path.relative(ctx.cwd, sf)
+
+  relativePath = relativePath.replaceAll(path.sep, '/')
+
   const refKey = ctx.refs.getRefKey(relativePath, typeName)
 
   schema.$ref = refKey
