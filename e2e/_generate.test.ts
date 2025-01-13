@@ -27,10 +27,10 @@ describe('test generate openapi schema', () => {
       routes: parser.routes,
     }
 
-    expect(output).toMatchFileSnapshot('openapi.schema.txt')
+    await expect(output).toMatchFileSnapshot('openapi.schema.txt')
 
     const schema = generator.generate(output.routes, output.refs)
 
-    expect(JSON.stringify(schema, null, 2)).toMatchFileSnapshot('openapi.schema.json')
+    await expect(JSON.stringify(schema, null, 2)).toMatchFileSnapshot('openapi.schema.json')
   })
 })

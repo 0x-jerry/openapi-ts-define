@@ -44,7 +44,7 @@ describe('object schema', () => {
         refs: ctx.refs.data,
       }
 
-      expect(output).toMatchFileSnapshot(outputFile)
+      await expect(output).toMatchFileSnapshot(outputFile)
     })
   }
 })

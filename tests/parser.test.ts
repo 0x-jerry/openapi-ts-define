@@ -31,11 +31,11 @@ describe('parse typescript definition', async () => {
         routes: parser.routes,
       }
 
-      expect(output).toMatchFileSnapshot(`out/${featureDir}/output.txt`)
+      await expect(output).toMatchFileSnapshot(`out/${featureDir}/output.txt`)
 
       const schema = generator.generate(output.routes, output.refs)
 
-      expect(JSON.stringify(schema, null, 2)).toMatchFileSnapshot(`out/${featureDir}/schema.json`)
+      await expect(JSON.stringify(schema, null, 2)).toMatchFileSnapshot(`out/${featureDir}/schema.json`)
     })
   }
 
