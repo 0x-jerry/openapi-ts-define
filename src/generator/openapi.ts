@@ -9,7 +9,7 @@ import type {
   SchemaObject,
 } from 'openapi-typescript'
 
-type PartialOpenAPIConfig = Omit<OpenAPI3, 'paths' | 'components' | 'tags' | 'openapi'>
+type PartialOpenAPIConfig = Omit<OpenAPI3, 'paths' | 'tags' | 'openapi'>
 
 export interface OpenAPIGeneratorConfig {
   /**
@@ -33,12 +33,19 @@ function createGenerator(option: OpenAPIGeneratorConfig) {
   }
 
   const generateOpenAPI: SchemaGenerator<OpenAPI3> = (routes, refs) => {
+    // merge schemas
+    const schemas = Object.assign(
+      {},
+      option.openAPI.components?.schemas,
+      Object.fromEntries(refs.entries()) as Record<string, SchemaObject>,
+    )
+
     const apiSpec: OpenAPI3 = {
       ...option.openAPI,
       openapi: '3.0.0',
       components: {
-        // convert to components
-        schemas: Object.fromEntries(refs.entries()) as Record<string, SchemaObject>,
+        ...option.openAPI.components,
+        schemas,
       },
       paths: {},
       tags: [],
@@ -139,7 +146,7 @@ function getPathItem(openapi: OpenAPI3, path: string) {
 
 function toParameterObject(
   config: RouteRequestParam,
-  place: ParameterObject['in']
+  place: ParameterObject['in'],
 ): ParameterObject {
   return {
     name: config.name,
