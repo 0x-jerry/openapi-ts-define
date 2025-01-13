@@ -44,3 +44,20 @@ export class RefsManager extends SimpleRefsManager {
     return `(${path}).${typeName}`
   }
 }
+
+export function isLibObject(type: tsm.Type, objectName: 'Date') {
+  const node = type.getSymbol()?.getDeclarations().at(0)
+
+  const nodeFilePath = node?.getSourceFile().getFilePath()
+  if (!nodeFilePath) {
+    return false
+  }
+
+  const libPathRegexp = /\/typescript\/lib\/lib\.[\w\d]+\.d\.ts$/
+
+  if (!libPathRegexp.test(nodeFilePath)) {
+    return false
+  }
+
+  return objectName === type.getText()
+}

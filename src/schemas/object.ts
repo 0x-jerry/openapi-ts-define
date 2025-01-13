@@ -2,7 +2,7 @@ import type { JSONSchema7 } from 'json-schema'
 import type tsm from 'ts-morph'
 import { toSchema } from './schema'
 import type { ToSchemaContext } from './types'
-import { getDocument } from './utils'
+import { getDocument, isLibObject } from './utils'
 
 export function toObjectSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema7 {
   const schema: JSONSchema7 = {
@@ -13,6 +13,13 @@ export function toObjectSchema(type: tsm.Type, ctx: ToSchemaContext): JSONSchema
 
   const doc = getDocument(type)
   if (doc) schema.description = doc
+
+  if (isLibObject(type, 'Date')) {
+    schema.type = 'number'
+    schema.format = 'date-time'
+
+    return schema
+  }
 
   const props = type.getProperties()
 

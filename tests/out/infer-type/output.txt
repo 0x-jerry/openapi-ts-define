@@ -1,7 +1,14 @@
 {
   "refs": Map {
+    "Date" => {
+      "format": "date-time",
+      "type": "number",
+    },
     "User" => {
       "properties": {
+        "createdAt": {
+          "$ref": "#/components/schemas/Date",
+        },
         "id": {
           "type": "string",
         },
@@ -12,6 +19,7 @@
       "required": [
         "id",
         "name",
+        "createdAt",
       ],
       "type": "object",
     },
@@ -35,6 +43,11 @@
           {
             "description": undefined,
             "name": "name",
+            "optional": false,
+          },
+          {
+            "description": undefined,
+            "name": "createdAt",
             "optional": false,
           },
         ],

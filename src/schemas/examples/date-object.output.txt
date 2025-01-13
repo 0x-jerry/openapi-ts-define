@@ -1,0 +1,39 @@
+{
+  "refs": Map {
+    "(../../../../../node_modules/typescript/lib/lib.es5.d.ts).Date" => {
+      "format": "date-time",
+      "type": "number",
+    },
+    "(date-object.ts).ObjectType" => {
+      "description": "Date property",
+      "properties": {
+        "time": {
+          "$ref": "(../../../../../node_modules/typescript/lib/lib.es5.d.ts).Date",
+        },
+      },
+      "type": "object",
+    },
+    "(date-object.ts).LiteralValueObject" => {
+      "properties": {
+        "t": {
+          "$ref": "(../../../../../node_modules/typescript/lib/lib.es5.d.ts).Date",
+        },
+      },
+      "required": [
+        "t",
+      ],
+      "type": "object",
+    },
+  },
+  "schemas": [
+    {
+      "$ref": "(date-object.ts).ObjectType",
+    },
+    {
+      "$ref": "(../../../../../node_modules/typescript/lib/lib.es5.d.ts).Date",
+    },
+    {
+      "$ref": "(date-object.ts).LiteralValueObject",
+    },
+  ],
+}

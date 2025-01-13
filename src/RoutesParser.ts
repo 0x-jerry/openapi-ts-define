@@ -141,7 +141,12 @@ export class RoutesParser {
      */
     const fnType = tc.getResolvedSignature(fnExpression)
 
-    const args = fnType?.getParameters().at(0)?.getTypeAtLocation(fnExpression).getTypeArguments()
+    const fnDeclaration = fnType?.getParameters().at(0)?.getTypeAtLocation(fnExpression)
+    let args = fnDeclaration?.getTypeArguments()
+
+    if (!args?.length) {
+      args = fnDeclaration?.getAliasTypeArguments()
+    }
 
     const reqArg = args?.at(0)
     const respArg = args?.at(1)

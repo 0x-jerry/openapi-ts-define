@@ -17,7 +17,7 @@ export function toEnumSchema(node: tsm.Type): JSONSchema7 {
   const values = types.filter((item) => item.isLiteral()).map((item) => item.getLiteralValue())
 
   // todo, need to filter big int value
-  schema.enum = values as any as EnumValue[]
+  schema.enum = values as unknown as EnumValue[]
 
   return schema
 }

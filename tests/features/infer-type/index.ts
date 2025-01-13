@@ -3,6 +3,7 @@ import { defRoute } from '../../def'
 interface User {
   id: string
   name: string
+  createdAt: Date
 }
 
 export default defRoute((req: { query: User }) => {

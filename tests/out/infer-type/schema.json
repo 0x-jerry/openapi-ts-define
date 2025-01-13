@@ -6,11 +6,16 @@
   "openapi": "3.0.0",
   "components": {
     "schemas": {
+      "Date": {
+        "type": "number",
+        "format": "date-time"
+      },
       "User": {
         "type": "object",
         "required": [
           "id",
-          "name"
+          "name",
+          "createdAt"
         ],
         "properties": {
           "id": {
@@ -18,6 +23,9 @@
           },
           "name": {
             "type": "string"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
           }
         }
       }
@@ -37,6 +45,14 @@
           },
           {
             "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "createdAt",
             "in": "query",
             "required": true,
             "schema": {
