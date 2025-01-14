@@ -18,6 +18,7 @@
   },
   "routes": [
     {
+      "deprecated": false,
       "description": undefined,
       "meta": {
         "filepath": "index.ts",

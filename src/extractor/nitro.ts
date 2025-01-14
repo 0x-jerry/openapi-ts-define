@@ -72,8 +72,6 @@ function isPathParam(pathPart: string) {
   return pathPart[0] === '[' && pathPart[pathPart.length - 1] === ']'
 }
 
-const ApiTagExtractRegexp = /^\.(?<name>[\w\d]+)\s+(?<value>.+)$/
-
 const nitroExtractor: RouteInfoExtractor = (source, ctx) => {
   const exportSymbol = source.getDefaultExportSymbol()
 
@@ -89,25 +87,14 @@ const nitroExtractor: RouteInfoExtractor = (source, ctx) => {
 
   const routeInfo = _convertToUrlPath(ctx.path)
 
-  const extraInfo: Record<string, string> = {}
-
-  const apiTag = exportSymbol.getJsDocTags().find((n) => n.getName() === 'api')
-
-  // biome-ignore lint/complexity/noForEach: <explanation>
-  apiTag?.getText().forEach((apiProperty) => {
-    const result = ApiTagExtractRegexp.exec(apiProperty.text)?.groups
-
-    if (result) {
-      extraInfo[result.name] = result.value
-    }
-  })
+  const jsTags = exportSymbol.getJsDocTags()
 
   const routeConfig: RouteInfo = {
     description: getDocument(exportSymbol),
     path: routeInfo.path,
     method: routeInfo.method,
     routeDefineAST: node,
-    extra: extraInfo,
+    jsTags,
   }
 
   return routeConfig

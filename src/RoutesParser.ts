@@ -9,6 +9,8 @@ import type { ReferenceManager, ToSchemaContext } from './schemas/types'
 import { RefsManager, getDocument } from './schemas/utils'
 import type { RouteConfig, RouteRequestParam } from './types'
 
+const ApiTagExtractRegexp = /^\.(?<name>[\w\d]+)\s+(?<value>.+)$/
+
 export interface RouteParserOption {
   tsconfig: string
   refsManager?: ReferenceManager
@@ -68,15 +70,18 @@ export class RoutesParser {
         ? this.getRequestParameters(typeParams.request)
         : undefined
 
+      const apiInfo = parseApiInfo(routeInfo.jsTags)
+
       const routeConfig: RouteConfig = {
-        name: routeInfo.extra.name,
+        name: apiInfo.name,
         description: routeInfo.description,
+        deprecated: hasJsDocTag(routeInfo.jsTags, 'deprecated'),
         path: routeInfo.path,
         method: routeInfo.method,
         request: reqConfig,
         response: this.nodeToSchema(typeParams.response),
         meta: {
-          ...routeInfo.extra,
+          ...apiInfo,
           filepath: relativeFilePath,
         },
       }
@@ -156,6 +161,26 @@ export class RoutesParser {
       response: respArg,
     }
   }
+}
+
+function hasJsDocTag(jsTags: tsm.JSDocTagInfo[], name: string) {
+  return jsTags.some((n) => n.getName() === name)
+}
+
+function parseApiInfo(jsTags: tsm.JSDocTagInfo[]) {
+  const apiInfo: Record<string, string> = {}
+  const apiTag = jsTags.find((n) => n.getName() === 'api')
+
+  // biome-ignore lint/complexity/noForEach: <explanation>
+  apiTag?.getText().forEach((apiProperty) => {
+    const result = ApiTagExtractRegexp.exec(apiProperty.text)?.groups
+
+    if (result) {
+      apiInfo[result.name] = result.value
+    }
+  })
+
+  return apiInfo
 }
 
 function parseSimpleObjectType(type?: tsm.Type): RouteRequestParam[] {

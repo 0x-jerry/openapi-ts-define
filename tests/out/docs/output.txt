@@ -18,6 +18,7 @@
   },
   "routes": [
     {
+      "deprecated": true,
       "description": "Get User Info",
       "meta": {
         "filepath": "index.ts",

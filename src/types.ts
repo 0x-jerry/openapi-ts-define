@@ -26,6 +26,8 @@ export interface RouteConfig {
   path: string
   method: string
   name?: string
+  deprecated?: boolean
+
   description?: string
 
   request?: {
