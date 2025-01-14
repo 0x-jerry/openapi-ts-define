@@ -77,10 +77,12 @@
   },
   "routes": [
     {
+      "description": undefined,
       "meta": {
         "filepath": "desc.ts",
       },
       "method": "get",
+      "name": undefined,
       "path": "/desc",
       "request": {
         "body": {
@@ -108,10 +110,12 @@
       },
     },
     {
+      "description": undefined,
       "meta": {
         "filepath": "index.ts",
       },
       "method": "get",
+      "name": undefined,
       "path": "/",
       "request": {
         "body": undefined,
@@ -137,10 +141,12 @@
       },
     },
     {
+      "description": undefined,
       "meta": {
         "filepath": "user.get.ts",
       },
       "method": "get",
+      "name": undefined,
       "path": "/user",
       "request": {
         "body": {
@@ -173,10 +179,12 @@
       },
     },
     {
+      "description": undefined,
       "meta": {
         "filepath": "export/name.put.ts",
       },
       "method": "put",
+      "name": undefined,
       "path": "/export/name",
       "request": {
         "body": {
@@ -198,10 +206,12 @@
       },
     },
     {
+      "description": undefined,
       "meta": {
         "filepath": "methods/patch.patch.ts",
       },
       "method": "patch",
+      "name": undefined,
       "path": "/methods/patch",
       "request": {
         "body": {
@@ -223,10 +233,12 @@
       },
     },
     {
+      "description": undefined,
       "meta": {
         "filepath": "user/[id].post.ts",
       },
       "method": "post",
+      "name": undefined,
       "path": "/user/{id}",
       "request": {
         "body": {

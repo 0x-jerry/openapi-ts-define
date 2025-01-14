@@ -14,10 +14,12 @@
   },
   "routes": [
     {
+      "description": undefined,
       "meta": {
         "filepath": "index.ts",
       },
       "method": "get",
+      "name": undefined,
       "path": "/",
       "request": {
         "body": undefined,

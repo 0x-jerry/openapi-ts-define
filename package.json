@@ -9,7 +9,7 @@
     "node": ">= 18"
   },
   "scripts": {
-    "dev": "npm run test:watch",
+    "dev": "tsx src/dev.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

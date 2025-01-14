@@ -21,8 +21,10 @@
       "description": "Get User Info",
       "meta": {
         "filepath": "index.ts",
+        "name": "get user info",
       },
       "method": "get",
+      "name": "get user info",
       "path": "/",
       "request": {
         "body": undefined,

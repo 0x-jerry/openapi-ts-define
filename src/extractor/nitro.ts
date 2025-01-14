@@ -30,9 +30,10 @@ export function _convertToUrlPath(relativeFilePath: string) {
 
   const parsedPath = path.parse(relativeFilePath)
   // remove path ext
-  relativeFilePath = relativeFilePath.replace(parsedPath.ext, '')
+  const relativeFilePathWithoutExt = relativeFilePath.replace(parsedPath.ext, '')
 
-  const urlSegments = relativeFilePath.split('/').map((part, idx, arr) => {
+  const urlSegments = relativeFilePathWithoutExt.split('/').map((_part, idx, arr) => {
+    let part = _part
     const isLast = arr.length - 1 === idx
 
     if (isLast) {
@@ -71,6 +72,8 @@ function isPathParam(pathPart: string) {
   return pathPart[0] === '[' && pathPart[pathPart.length - 1] === ']'
 }
 
+const ApiTagExtractRegexp = /^\.(?<name>[\w\d]+)\s+(?<value>.+)$/
+
 const nitroExtractor: RouteInfoExtractor = (source, ctx) => {
   const exportSymbol = source.getDefaultExportSymbol()
 
@@ -86,11 +89,25 @@ const nitroExtractor: RouteInfoExtractor = (source, ctx) => {
 
   const routeInfo = _convertToUrlPath(ctx.path)
 
+  const extraInfo: Record<string, string> = {}
+
+  const apiTag = exportSymbol.getJsDocTags().find((n) => n.getName() === 'api')
+
+  // biome-ignore lint/complexity/noForEach: <explanation>
+  apiTag?.getText().forEach((apiProperty) => {
+    const result = ApiTagExtractRegexp.exec(apiProperty.text)?.groups
+
+    if (result) {
+      extraInfo[result.name] = result.value
+    }
+  })
+
   const routeConfig: RouteInfo = {
     description: getDocument(exportSymbol),
     path: routeInfo.path,
     method: routeInfo.method,
     routeDefineAST: node,
+    extra: extraInfo,
   }
 
   return routeConfig

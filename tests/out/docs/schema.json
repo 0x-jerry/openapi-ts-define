@@ -26,6 +26,7 @@
   "paths": {
     "/": {
       "get": {
+        "summary": "get user info",
         "description": "Get User Info",
         "parameters": [
           {

@@ -69,17 +69,16 @@ export class RoutesParser {
         : undefined
 
       const routeConfig: RouteConfig = {
+        name: routeInfo.extra.name,
+        description: routeInfo.description,
         path: routeInfo.path,
         method: routeInfo.method,
         request: reqConfig,
         response: this.nodeToSchema(typeParams.response),
         meta: {
+          ...routeInfo.extra,
           filepath: relativeFilePath,
         },
-      }
-
-      if (routeInfo.description) {
-        routeConfig.description = routeInfo.description
       }
 
       return routeConfig

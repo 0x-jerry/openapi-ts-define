@@ -17,7 +17,7 @@ const parser = new RoutesParser({
 })
 
 parser.parse({
-  routesRoot: path.resolve('tests/features/infer-type'),
+  routesRoot: path.resolve('tests/features/docs'),
   matchFiles: ['**/*.ts', '!**/_*.ts'],
 })
 
@@ -26,4 +26,4 @@ const output = {
   routes: parser.routes,
 }
 
-console.log(output)
+console.log(JSON.stringify(output, null, 2))

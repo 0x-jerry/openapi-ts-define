@@ -11,6 +11,7 @@ export interface RouteInfo {
   method: string
   description?: string
   routeDefineAST: tsm.CallExpression
+  extra: Record<string, string | undefined>
 }
 
 export type RouteInfoExtractor = (

@@ -7,6 +7,9 @@ interface User {
 
 /**
  * Get User Info
+ *
+ * @api.name get user info
+ * @api.info some other information
  */
 export default defRoute<{ query: { id: string } }, { data: User }>(() => {
   return {

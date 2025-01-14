@@ -25,6 +25,7 @@ export interface RouteRequestParam {
 export interface RouteConfig {
   path: string
   method: string
+  name?: string
   description?: string
 
   request?: {
@@ -37,5 +38,6 @@ export interface RouteConfig {
 
   meta: {
     filepath: string
+    [key: string]: string | undefined
   }
 }
