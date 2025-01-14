@@ -11,9 +11,15 @@ importers:
       '@0x-jerry/utils':
         specifier: ^4.2.1
         version: 4.2.1
+      '@types/json-schema':
+        specifier: ^7.0.15
+        version: 7.0.15
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
+      openapi-typescript:
+        specifier: ^7.5.2
+        version: 7.5.2(typescript@5.7.3)
       ts-morph:
         specifier: ^25.0.0
         version: 25.0.0
@@ -24,18 +30,12 @@ importers:
       '@biomejs/biome':
         specifier: ^1.9.4
         version: 1.9.4
-      '@types/json-schema':
-        specifier: ^7.0.15
-        version: 7.0.15
       '@types/node':
         specifier: ^22.10.5
         version: 22.10.5
       '@vitest/coverage-v8':
         specifier: ^2.1.8
         version: 2.1.8(vitest@2.1.8(@types/node@22.10.5))
-      openapi-typescript:
-        specifier: ^7.5.2
-        version: 7.5.2(typescript@5.7.3)
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@1.21.7)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)
