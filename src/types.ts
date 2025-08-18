@@ -1,10 +1,8 @@
 import type { JSONSchema7 } from 'json-schema'
 
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
 export type EmptyObject = {}
 
 export interface RequestParams<
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   Body extends Record<string, any> = EmptyObject,
   Query extends Record<string, string> = EmptyObject,
   Params extends Record<string, string> = EmptyObject,

@@ -13,6 +13,9 @@ export interface RouteInfo {
   path: string
   method: string
   description?: string
+  /**
+   * Api define node
+   */
   routeDefineAST: tsm.CallExpression
   jsTags: tsm.JSDocTagInfo[]
 }
@@ -22,8 +25,14 @@ export type RouteInfoExtractCallback = (
   ctx: RouteInfoExtractorContext,
 ) => Arrayable<RouteInfo> | undefined
 
-export interface RouteInfoExtractor  {
+export interface RouteInfoExtractor {
+  /**
+   * Routes root
+   */
   root: string
+  /**
+   * Match files, glob pattern
+   */
   files: string[]
 
   extract: RouteInfoExtractCallback

@@ -1,0 +1,91 @@
+{
+  "refs": Map {
+    "User" => {
+      "properties": {
+        "id": {
+          "type": "string",
+        },
+        "name": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "id",
+        "name",
+      ],
+      "type": "object",
+    },
+  },
+  "routes": [
+    {
+      "deprecated": true,
+      "description": "Get User Info",
+      "meta": {
+        "filepath": "api/route.ts",
+        "name": "get user info",
+      },
+      "method": "GET",
+      "name": "get user info",
+      "path": "/api/",
+      "request": {
+        "body": undefined,
+        "params": [],
+        "query": [
+          {
+            "description": undefined,
+            "name": "id",
+            "optional": false,
+          },
+        ],
+      },
+      "response": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/User",
+          },
+        },
+        "required": [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+    {
+      "deprecated": true,
+      "description": "Get User Info",
+      "meta": {
+        "filepath": "api/route.ts",
+        "name": "get user info",
+      },
+      "method": "POST",
+      "name": "get user info",
+      "path": "/api/",
+      "request": {
+        "body": {
+          "properties": {
+            "id": {
+              "type": "string",
+            },
+          },
+          "required": [
+            "id",
+          ],
+          "type": "object",
+        },
+        "params": [],
+        "query": [],
+      },
+      "response": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/User",
+          },
+        },
+        "required": [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+  ],
+}

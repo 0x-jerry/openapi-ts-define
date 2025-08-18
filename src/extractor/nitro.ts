@@ -72,7 +72,7 @@ function isPathParam(pathPart: string) {
   return pathPart[0] === '[' && pathPart[pathPart.length - 1] === ']'
 }
 
-const nitroExtract: RouteInfoExtractCallback = (source, ctx) => {
+const extractRouteInfo: RouteInfoExtractCallback = (source, ctx) => {
   const exportSymbol = source.getDefaultExportSymbol()
 
   if (!exportSymbol) {
@@ -147,7 +147,7 @@ export function nitroExtractor(option: NitroExtractorOptions) {
   const extractor: RouteInfoExtractor = {
     root: option.root,
     files: option.files ?? ['**/*.ts'],
-    extract: nitroExtract,
+    extract: extractRouteInfo,
   }
 
   return extractor
