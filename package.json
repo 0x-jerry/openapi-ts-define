@@ -42,8 +42,5 @@
     "fast-glob": "^3.3.3",
     "openapi-typescript": "^7.9.1",
     "ts-morph": "^26.0.0"
-  },
-  "stackblitz": {
-    "startCommand": "npm run test:watch"
   }
 }

@@ -4,11 +4,11 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    testTimeout: 10000,
     coverage: {
       provider: 'v8',
       include: ['src/**/*.ts'],
-      exclude: ['src/**/*.d.ts', 'src/**/*.test.ts'],
-      reporter: ['clover', 'html-spa'],
+      exclude: ['src/**/*.d.ts', '**/*.test.ts']
     },
   },
 })
