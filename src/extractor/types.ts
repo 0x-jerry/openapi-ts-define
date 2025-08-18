@@ -3,7 +3,7 @@ import type tsm from 'ts-morph'
 
 export interface RouteInfoExtractorContext {
   /**
-   * Realtive path
+   * Relative path
    */
   path: string
   project: tsm.Project

@@ -1,3 +1,4 @@
+export * from './extractor'
 export { default as OpenAPIGenerator } from './generator/openapi'
 export * from './presets'
 export { RoutesParser } from './RoutesParser'
