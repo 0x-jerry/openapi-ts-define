@@ -1,6 +1,7 @@
 import path from 'node:path'
 import { OpenAPIGenerator } from '.'
 import { RoutesParser } from './RoutesParser'
+import { nitroExtractor } from './extractor/nitro'
 
 const generator = OpenAPIGenerator({
   openAPI: {
@@ -16,10 +17,12 @@ const parser = new RoutesParser({
   refsManager: generator.refsManager!,
 })
 
-parser.parse({
-  routesRoot: path.resolve('tests/features/docs'),
-  matchFiles: ['**/*.ts', '!**/_*.ts'],
+const extractor = nitroExtractor({
+  root: path.resolve('tests/features/docs'),
+  files: ['**/*.ts', '!**/_*.ts'],
 })
+
+parser.parse(extractor)
 
 const output = {
   refs: parser.schemaContext.refs.data,

@@ -1,9 +1,8 @@
-import path from 'node:path'
 import { ensureArray } from '@0x-jerry/utils'
 import fg from 'fast-glob'
+import path from 'node:path'
 import tsm, { Node, type Project } from 'ts-morph'
-import nitroExtractor from './extractor/nitro'
-import type { RouteInfoExtractor } from './extractor/types'
+import type { RouteInfoExtractCallback, RouteInfoExtractor } from './extractor/types'
 import { toSchema } from './schemas/schema'
 import type { ReferenceManager, ToSchemaContext } from './schemas/types'
 import { RefsManager, getDocument } from './schemas/utils'
@@ -37,19 +36,17 @@ export class RoutesParser {
     }
   }
 
-  parse(opt: ApiRoutesConfig) {
-    const extractor = opt.routeInfoExtractor ?? nitroExtractor
-
-    const files = fg.sync(opt.matchFiles, { cwd: opt.routesRoot })
+  parse(extractor: RouteInfoExtractor) {
+    const files = fg.sync(extractor.files, { cwd: extractor.root })
 
     for (const file of files) {
-      const config = this.parseApiRouteFile(file, opt.routesRoot, extractor)
+      const config = this.parseApiRouteFile(file, extractor.root, extractor.extract)
 
       this.routes.push(...config)
     }
   }
 
-  parseApiRouteFile(relativeFilePath: string, root: string, extractor: RouteInfoExtractor) {
+  parseApiRouteFile(relativeFilePath: string, root: string, extractor: RouteInfoExtractCallback) {
     const project = this.project
 
     const filePath = path.join(root, relativeFilePath)
@@ -171,7 +168,6 @@ function parseApiInfo(jsTags: tsm.JSDocTagInfo[]) {
   const apiInfo: Record<string, string> = {}
   const apiTag = jsTags.find((n) => n.getName() === 'api')
 
-  // biome-ignore lint/complexity/noForEach: <explanation>
   apiTag?.getText().forEach((apiProperty) => {
     const result = ApiTagExtractRegexp.exec(apiProperty.text)?.groups
 
@@ -204,19 +200,4 @@ function parseSimpleObjectType(type?: tsm.Type): RouteRequestParam[] {
   }
 
   return names
-}
-
-export interface ApiRoutesConfig {
-  /**
-   * Routes directory
-   */
-  routesRoot: string
-  /**
-   * Glob pattern
-   */
-  matchFiles: string[]
-  /**
-   * Extract route info
-   */
-  routeInfoExtractor?: RouteInfoExtractor
 }

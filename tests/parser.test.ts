@@ -1,6 +1,7 @@
 import { readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { OpenAPIGenerator, RoutesParser } from '../src'
+import { nitroExtractor } from '../src/extractor/nitro'
 
 describe('parse typescript definition', async () => {
   const featureDirs = await readdir('tests/features')
@@ -21,10 +22,12 @@ describe('parse typescript definition', async () => {
         refsManager: generator.refsManager!,
       })
 
-      parser.parse({
-        routesRoot: path.resolve(`tests/features/${featureDir}`),
-        matchFiles: ['**/*.ts', '!**/_*.ts'],
+      const extractor = nitroExtractor({
+        root: path.resolve(`tests/features/${featureDir}`),
+        files: ['**/*.ts', '!**/_*.ts'],
       })
+
+      parser.parse(extractor)
 
       const output = {
         refs: parser.schemaContext.refs.data,

@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { OpenAPIGenerator, RoutesParser } from '../src'
+import { nitroExtractor } from '../src/extractor/nitro'
 
 describe('test generate openapi schema', () => {
   it('should generate oepnapi schema file', async () => {
@@ -17,10 +18,12 @@ describe('test generate openapi schema', () => {
       refsManager: generator.refsManager!,
     })
 
-    parser.parse({
-      routesRoot: path.resolve('e2e/routes'),
-      matchFiles: ['**/*.ts', '!**/_*.ts'],
+    const extractor = nitroExtractor({
+      root: path.resolve('e2e/routes'),
+      files: ['**/*.ts', '!**/_*.ts'],
     })
+
+    parser.parse(extractor)
 
     const output = {
       refs: parser.schemaContext.refs.data,

@@ -3,7 +3,7 @@ import type tsm from 'ts-morph'
 import { Node } from 'ts-morph'
 import { getDocument } from '../schemas/utils'
 import type { RouteRequestParam } from '../types'
-import type { RouteInfo, RouteInfoExtractor } from './types'
+import type { RouteInfo, RouteInfoExtractCallback, RouteInfoExtractor } from './types'
 
 const methodRE = /\.(?<method>get|post|put|delete|patch)$/i
 
@@ -72,7 +72,7 @@ function isPathParam(pathPart: string) {
   return pathPart[0] === '[' && pathPart[pathPart.length - 1] === ']'
 }
 
-const nitroExtractor: RouteInfoExtractor = (source, ctx) => {
+const nitroExtract: RouteInfoExtractCallback = (source, ctx) => {
   const exportSymbol = source.getDefaultExportSymbol()
 
   if (!exportSymbol) {
@@ -132,4 +132,23 @@ function getRouteDefineNode(exportSymbol: tsm.Symbol) {
   }
 }
 
-export default nitroExtractor
+export interface NitroExtractorOptions {
+  /**
+   * Routes directory
+   */
+  root: string
+  /**
+   * Glob pattern
+   */
+  files?: string[]
+}
+
+export function nitroExtractor(option: NitroExtractorOptions) {
+  const extractor: RouteInfoExtractor = {
+    root: option.root,
+    files: option.files ?? ['**/*.ts'],
+    extract: nitroExtract,
+  }
+
+  return extractor
+}
