@@ -24,7 +24,7 @@
     }
   },
   "paths": {
-    "/api/": {
+    "/api": {
       "get": {
         "summary": "get user info",
         "description": "Get User Info",

@@ -25,28 +25,25 @@ export function _convertToUrlPath(relativeFilePath: string) {
   // remove path ext
   const relativeFilePathWithoutExt = relativeFilePath.replace(parsedPath.ext, '')
 
-  const urlSegments = relativeFilePathWithoutExt.split('/').map((part, idx, arr) => {
-    const isLast = arr.length - 1 === idx
+  const urlSegments = relativeFilePathWithoutExt
+    .split('/')
+    .slice(0, -1)
+    .map((part) => {
+      if (isPathParam(part)) {
+        const name = part.slice(1, -1)
+        const isArray = name.startsWith('...')
+        if (isArray) {
+          throw new Error(`Not support array params`)
+        }
+        params.push({
+          name,
+        })
 
-    if (isLast) {
-      return ''
-    }
-
-    if (isPathParam(part)) {
-      const name = part.slice(1, -1)
-      const isArray = name.startsWith('...')
-      if (isArray) {
-        throw new Error(`Not support array params`)
+        return `{${name}}`
       }
-      params.push({
-        name,
-      })
 
-      return `{${name}}`
-    }
-
-    return part
-  })
+      return part
+    })
 
   if (urlSegments.at(-1) === 'index') {
     urlSegments.splice(urlSegments.length - 1, 1)
