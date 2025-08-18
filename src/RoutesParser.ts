@@ -1,11 +1,11 @@
+import path from 'node:path'
 import { ensureArray } from '@0x-jerry/utils'
 import fg from 'fast-glob'
-import path from 'node:path'
 import tsm, { Node, type Project } from 'ts-morph'
 import type { RouteInfoExtractCallback, RouteInfoExtractor } from './extractor/types'
 import { toSchema } from './schemas/schema'
 import type { ReferenceManager, ToSchemaContext } from './schemas/types'
-import { RefsManager, getDocument } from './schemas/utils'
+import { getDocument, RefsManager } from './schemas/utils'
 import type { RouteConfig, RouteRequestParam } from './types'
 
 const ApiTagExtractRegexp = /^\.(?<name>[\w\d]+)\s+(?<value>.+)$/
