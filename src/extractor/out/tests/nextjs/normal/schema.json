@@ -25,7 +25,7 @@
   },
   "paths": {
     "/api/": {
-      "GET": {
+      "get": {
         "summary": "get user info",
         "description": "Get User Info",
         "parameters": [
@@ -59,7 +59,7 @@
           }
         }
       },
-      "POST": {
+      "post": {
         "summary": "get user info",
         "description": "Get User Info",
         "parameters": [],
@@ -77,6 +77,23 @@
                     "data": {
                       "$ref": "#/components/schemas/User"
                     }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
                   }
                 }
               }

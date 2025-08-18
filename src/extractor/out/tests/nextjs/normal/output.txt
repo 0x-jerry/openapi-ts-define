@@ -24,7 +24,7 @@
         "filepath": "api/route.ts",
         "name": "get user info",
       },
-      "method": "GET",
+      "method": "get",
       "name": "get user info",
       "path": "/api/",
       "request": {
@@ -57,7 +57,7 @@
         "filepath": "api/route.ts",
         "name": "get user info",
       },
-      "method": "POST",
+      "method": "post",
       "name": "get user info",
       "path": "/api/",
       "request": {
