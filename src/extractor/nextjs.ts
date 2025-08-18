@@ -92,7 +92,7 @@ const extractRouteInfo: RouteInfoExtractCallback = (source, ctx) => {
     const routeConfig: RouteInfo = {
       description: getDocument(declareSymbol),
       path: routeInfo.path,
-      method: method,
+      method: method.toLowerCase(),
       routeDefineAST: node,
       jsTags,
     }
